@@ -1,0 +1,645 @@
+{
+  "meta": {
+    "name": "John Ross",
+    "location": "Portland, Maine",
+    "email": "AIGuy207@gmail.com",
+    "phone": "207.329.3854",
+    "linkedin": "LinkedIn.com/in/AIGuy207",
+    "education": [
+      {
+        "degree": "M.S., Business Analytics",
+        "school": "University of Southern Maine",
+        "location": "Portland, ME",
+        "year": 2019
+      },
+      {
+        "degree": "B.S., Business Administration",
+        "school": "University of Southern Maine",
+        "location": "Portland, ME",
+        "year": 2015
+      }
+    ]
+  },
+  "positions": [
+    {
+      "id": "unum-disability-specialist",
+      "title": "Disability Specialist / Lead Disability Specialist",
+      "company": "Unum",
+      "location": "Portland, Maine",
+      "start_date": "2015-03",
+      "end_date": "2018-05",
+      "context": "First insurance role. Promoted to Lead within 18 months based on performance; selected, did not apply. Managed heavy caseloads well above standard volume.",
+      "categories": [
+        {
+          "name": "Claims Management & Operational Execution",
+          "blocks": [
+            "Managed a caseload of 180–200+ short-term disability claims simultaneously (well above standard volume), ensuring accurate, compliant, and timely claims decisions",
+            "Served as primary point of contact for claimants, handling daily inbound communication and benefits coordination via direct line",
+            "Facilitated clinical review sessions 2x/week, driving alignment between clinicians, vocational representatives, managers, and examiners on claim decisions; documented outcomes and ensured consensus",
+            "Led clinical review sessions in a de facto management capacity without holding a formal management title"
+          ]
+        },
+        {
+          "name": "Client Relationship Management",
+          "blocks": [
+            "Managed relationships for 8+ large hospital accounts, including 3 high-touch/advanced accounts as primary point of contact",
+            "Maintained strong service standards across all assigned accounts with zero escalation issues",
+            "Partnered with enterprise clients to ensure claims handling met contractual and relationship expectations"
+          ]
+        },
+        {
+          "name": "Leadership & Mentorship",
+          "blocks": [
+            "Selected to lead the Achieving Communication Excellence (ACE) Program, a pilot initiative to improve examiner phone communication through recorded call reviews and 1:1 coaching",
+            "Chosen for ACE leadership role based on natural phone skills and peer influence; role was designed to drive organizational change through examiner buy-in",
+            "Mentored and trained new examiners on claims management processes, compliance standards, and best practices",
+            "Operated as a peer leader across the team, consistently stepping into leadership roles without formal authority"
+          ]
+        },
+        {
+          "name": "Process Improvement & Innovation",
+          "blocks": [
+            "Designed a new correspondence tracking spreadsheet and process format that saved every examiner on the account approximately 15 minutes per day",
+            "Continuously identified and proposed process improvements to increase team efficiency and reduce administrative burden"
+          ]
+        },
+        {
+          "name": "Domain Expertise",
+          "blocks": [
+            "Deep hands-on experience in short-term disability (STD) claims adjudication, including medical review, benefit calculations, and regulatory compliance",
+            "Developed foundational understanding of disability insurance operations, clinical decision-making, and claimant advocacy"
+          ]
+        }
+      ],
+      "impact_statements": [
+        {
+          "id": "ds-1",
+          "text": "Managed 180–200+ concurrent STD claims in a high-volume environment, maintaining accuracy and compliance standards",
+          "tags": ["claims-management", "STD", "high-volume", "operational-excellence"]
+        },
+        {
+          "id": "ds-2",
+          "text": "Led bi-weekly clinical review sessions across cross-functional teams, driving consensus on complex claim decisions without holding a management title",
+          "tags": ["leadership-without-authority", "clinical-reviews", "cross-functional"]
+        },
+        {
+          "id": "ds-3",
+          "text": "Served as primary point of contact for 3 high-touch enterprise hospital accounts, maintaining zero escalation issues",
+          "tags": ["client-relationships", "hospital-accounts", "enterprise"]
+        },
+        {
+          "id": "ds-4",
+          "text": "Led the ACE Program pilot, a coaching initiative using recorded call reviews to improve examiner communication skills and drive organizational change",
+          "tags": ["communication-coaching", "change-management", "training", "leadership"]
+        },
+        {
+          "id": "ds-5",
+          "text": "Designed a streamlined correspondence tracking process that saved each examiner ~15 minutes/day across the account",
+          "tags": ["process-improvement", "operational-excellence", "efficiency"]
+        },
+        {
+          "id": "ds-6",
+          "text": "Promoted to Lead Disability Specialist within 18 months based on performance; selected, did not apply",
+          "tags": ["career-growth", "performance", "leadership"]
+        },
+        {
+          "id": "ds-7",
+          "text": "Mentored and onboarded new examiners, establishing foundational training practices for the team",
+          "tags": ["mentorship", "training", "team-building"]
+        }
+      ],
+      "tags": ["claims-management", "STD", "disability-insurance", "client-relationships", "hospital-accounts", "mentorship", "training", "process-improvement", "leadership-without-authority", "communication-coaching", "clinical-reviews", "high-volume-caseload", "change-management", "operational-excellence"]
+    },
+    {
+      "id": "unum-pm-hris",
+      "title": "Project Manager, HRIS Integration (HR Connect)",
+      "company": "Unum",
+      "location": "Portland, Maine",
+      "start_date": "2018-05",
+      "end_date": "2020-09",
+      "context": "One of the first two onboarding consultants hired for HR Connect, Unum's proprietary, first-of-its-kind HRIS integration product. Team grew from 2 to 7 during tenure. HR Connect now serves 1,000+ enterprise employers across Workday, ADP, and UKG integrations.",
+      "categories": [
+        {
+          "name": "Product Implementation & Technical Delivery",
+          "blocks": [
+            "Onboarded and maintained 52+ enterprise clients on HR Connect, among the highest volume on the team (standard capacity was ~5 active implementations per person)",
+            "Implemented four integration types between Unum's CMS and Workday: absence management (primary), billing/census automation, benefit enrollment (voluntary and group), and evidence of insurability (EOI)",
+            "Configured Workday environments for each client, building custom reports, managing EIBs, setting up benefit structures, and mapping carrier data to HRIS fields",
+            "Worked daily with engineering teams on data integrity, new feature design, and reformatting customer reports into downloadable libraries to replace manual processes",
+            "Handled full end-to-end client implementation: technical integration setup, plan design, benefit onboarding, enrollment configuration, and EOI workflows"
+          ]
+        },
+        {
+          "name": "Product Innovation & Strategic Influence",
+          "blocks": [
+            "Led the first and only successful Oracle HCM integration pilot for HR Connect, designing and documenting all technical requirements, working directly with engineers, and bringing two customers to successful go-live",
+            "Based on firsthand pilot experience, conducted research and presented recommendation to leadership to deprioritize Oracle investment and redirect resources toward more scalable HRIS platforms; recommendation was adopted",
+            "Built reusable customer report libraries that replaced manual configuration steps, accelerating onboarding for subsequent clients",
+            "Served as the primary absence integration specialist, shaping best practices and implementation patterns for the product's most popular module"
+          ]
+        },
+        {
+          "name": "Revenue Impact & Pre-Sales",
+          "blocks": [
+            "Participated in 20+ finalist meetings as a subject matter expert, using the HR Connect integration pitch to help close enterprise deals",
+            "HR Connect was frequently cited as the deciding factor in competitive sales situations, as the integration value proposition directly addressed customer pain points around HR administrative burden",
+            "Supported growth of a platform that now serves 1,000+ enterprise employers; HR Connect automated absence tracking, billing reconciliation, and benefits enrollment, becoming a key differentiator in Unum's enterprise sales motion"
+          ]
+        },
+        {
+          "name": "Client Relationship Management",
+          "blocks": [
+            "Managed relationships with 52+ enterprise clients including major national brands (Fortune 500, major sports leagues, national retail chains)",
+            "Served as the primary point of contact through implementation and ongoing maintenance, handling technical issues, configuration changes, and escalations",
+            "Maintained high client satisfaction across an oversized book of business, significantly above the ~5-client standard workload"
+          ]
+        },
+        {
+          "name": "Technical Skills Demonstrated",
+          "blocks": [
+            "Workday configuration: custom reports, EIBs, benefit module setup, absence module configuration, carrier data mapping",
+            "HRIS integration architecture: bi-directional data flows between CMS and Workday/Oracle HCM",
+            "Requirements documentation and technical specification for net-new platform integrations (Oracle pilot)",
+            "Data integrity management and feature design collaboration with engineering teams",
+            "Process mining (bupaR/R): self-initiated POC using claims data that produced analytics capabilities the company had never seen, directly leading to transition into Advanced Analytics role"
+          ]
+        },
+        {
+          "name": "Domain Expertise",
+          "blocks": [
+            "Comprehensive knowledge of group benefits and voluntary benefits product structures, plan design, enrollment workflows, and EOI processes",
+            "Deep understanding of carrier data models and how they map to HRIS systems (Workday, Oracle HCM)",
+            "Absence management specialization: expert-level understanding of how leave/disability data flows between carrier systems and employer HRIS platforms",
+            "Billing and census data automation: understanding of how integration eliminates manual reconciliation for employers"
+          ]
+        },
+        {
+          "name": "Career Trajectory & Initiative",
+          "blocks": [
+            "Self-initiated a process mining POC using bupaR packages in R with fabricated claims data, creating analytics visualizations the company had never produced",
+            "POC was so impressive that leadership recognized misalignment between role and capabilities, leading to direct recruitment into the Advanced Analytics team",
+            "Demonstrated pattern of outgrowing roles through initiative, transitioning from operations to technical/analytics track based entirely on self-driven work"
+          ]
+        }
+      ],
+      "impact_statements": [
+        {
+          "id": "hris-1",
+          "text": "One of the first two onboarding consultants for Unum's HR Connect, a first-of-its-kind HRIS integration product that now serves 1,000+ enterprise employers across Workday, ADP, and UKG",
+          "tags": ["HRIS-integration", "HR-Connect", "founding-team", "enterprise", "Workday"]
+        },
+        {
+          "id": "hris-2",
+          "text": "Onboarded and maintained 52+ enterprise clients on bi-directional integrations between Unum's CMS and Workday, far exceeding the standard workload of ~5 active implementations",
+          "tags": ["implementation", "enterprise-clients", "high-volume", "Workday"]
+        },
+        {
+          "id": "hris-3",
+          "text": "Implemented four integration types (absence, billing/census, benefit enrollment, EOI), serving as the team's primary specialist for absence management (the product's most popular module)",
+          "tags": ["absence-management", "billing-automation", "benefit-enrollment", "EOI", "specialization"]
+        },
+        {
+          "id": "hris-4",
+          "text": "Participated in 20+ finalist meetings as a technical SME; HR Connect integration pitch was frequently cited as the deciding factor in closing enterprise deals",
+          "tags": ["pre-sales", "finalist-meetings", "revenue-generation", "enterprise"]
+        },
+        {
+          "id": "hris-5",
+          "text": "Led the first successful Oracle HCM integration pilot, designing requirements, managing engineering collaboration, and bringing two customers to go-live",
+          "tags": ["Oracle-HCM", "pilot-programs", "requirements-documentation", "engineering-collaboration"]
+        },
+        {
+          "id": "hris-6",
+          "text": "Researched and recommended to leadership that Unum deprioritize Oracle HCM investment in favor of more scalable platforms; recommendation was adopted and redirected product strategy",
+          "tags": ["strategic-recommendations", "product-strategy", "leadership-influence"]
+        },
+        {
+          "id": "hris-7",
+          "text": "Configured Workday environments across 52+ clients, building custom reports, managing EIBs, mapping carrier data, and designing downloadable report libraries to replace manual processes",
+          "tags": ["Workday", "EIBs", "custom-reports", "carrier-data", "process-improvement"]
+        },
+        {
+          "id": "hris-8",
+          "text": "Self-initiated a process mining POC using bupaR in R that produced analytics capabilities the company had never seen, directly leading to recruitment into the Advanced Analytics team",
+          "tags": ["process-mining", "bupaR", "R", "POC", "initiative", "career-growth"]
+        },
+        {
+          "id": "hris-9",
+          "text": "Grew the HR Connect implementation team from 2 to 7 members during tenure, helping define onboarding processes and best practices as the program scaled",
+          "tags": ["team-growth", "scaling", "best-practices", "founding-team"]
+        }
+      ],
+      "tags": ["HRIS-integration", "Workday", "Oracle-HCM", "HR-Connect", "implementation", "onboarding", "enterprise-clients", "pre-sales", "finalist-meetings", "revenue-generation", "absence-management", "billing-automation", "benefit-enrollment", "EOI", "plan-design", "carrier-data", "data-mapping", "EIBs", "custom-reports", "process-mining", "bupaR", "R", "POC", "product-innovation", "requirements-documentation", "pilot-programs", "strategic-recommendations", "cross-functional", "engineering-collaboration", "feature-design", "Fortune-500"]
+    },
+    {
+      "id": "unum-ba-analytics",
+      "title": "Business Analyst, Advanced Analytics",
+      "company": "Unum",
+      "location": "Portland, Maine",
+      "start_date": "2020-09",
+      "end_date": "2021-10",
+      "context": "Transitioned into this role after self-initiated process mining POC caught leadership's attention. Bridge between business operations and technical/data science teams, with a focus on NLP, cloud strategy, vendor evaluation, and AI/ML adoption.",
+      "categories": [
+        {
+          "name": "AI/ML Development & NLP",
+          "blocks": [
+            "Partnered with a data scientist to build a custom NLP-based email classification engine using Python (spaCy) that categorized incoming customer service inquiries (Ask Unum) across 16 classification types",
+            "Improved classification accuracy from ~25% to 92%, replacing an outdated legacy system that caused widespread misrouting of service requests",
+            "System pulled directly from Outlook's Apex servers, classified inbound requests, and routed them through the existing Salesforce-based workflow to the correct teams automatically",
+            "Solution was implemented in production, resulting in a validated savings equivalent to 20+ FTEs who had previously spent significant time manually rerouting misclassified service requests",
+            "Built the classification engine in approximately 4 months from concept to production deployment"
+          ]
+        },
+        {
+          "name": "Vendor Evaluation & Build-vs-Buy Analysis",
+          "blocks": [
+            "Conducted formal build-vs-buy analysis comparing the internal NLP classification engine against Usher, an external white-glove NLP classification service",
+            "Presented recommendation to senior leadership to adopt Usher, freeing internal resources to focus on higher-value initiatives despite the internal solution's strong performance",
+            "Led a 6–8 month POC with EvolutionIQ as project lead, working directly with CEO Michael Saltzman to evaluate their AI-powered claims maturity product for Unum's disability portfolio",
+            "Evaluated multiple AI/ML and InsurTech vendors (including Digital Owl and others) for business fit, technical capability, and ROI potential; established evaluation frameworks for incoming vendor pitches"
+          ]
+        },
+        {
+          "name": "Cloud Strategy & Data Infrastructure",
+          "blocks": [
+            "Supported department-level cloud migration strategy, helping define business justifications for moving on-premises data to AWS and Snowflake",
+            "Focused on strategy and planning, identifying which data sets and workflows should migrate and the business rationale supporting each decision",
+            "Contributed to Unum's broader data modernization efforts during a period of significant infrastructure transformation"
+          ]
+        },
+        {
+          "name": "Strategic Advisory & Executive Influence",
+          "blocks": [
+            "Advised the CTO on chatbot strategy as part of the Phoenix/Fineos omnichannel experience initiative, as multiple teams across the organization were independently pursuing different chatbot approaches",
+            "Delivered a formal comparative analysis and presentation to the CTO recommending a specific out-of-the-box chatbot service based on performance benchmarks and cost-effectiveness; recommendation was adopted by leadership",
+            "Validated the 20+ FTE savings estimate in a workshop with senior leadership, building credibility for data-driven operational improvement initiatives",
+            "Presented build-vs-buy recommendations that directly influenced resource allocation and vendor partnerships"
+          ]
+        },
+        {
+          "name": "Technical Skills Demonstrated",
+          "blocks": [
+            "Python (spaCy) for NLP classification",
+            "Salesforce administration and workflow management",
+            "Cloud services strategy (AWS, Snowflake)",
+            "Data migration planning and business case development",
+            "Vendor evaluation frameworks and POC management",
+            "Chatbot/conversational AI landscape assessment",
+            "Process mining (bupaR/R, carried forward from previous role)"
+          ]
+        },
+        {
+          "name": "Domain Expertise",
+          "blocks": [
+            "Deep understanding of customer service operations and inquiry routing in insurance",
+            "InsurTech vendor landscape knowledge: evaluated multiple AI/ML startups and services for enterprise insurance use cases",
+            "Familiarity with EvolutionIQ's claims maturity AI product and competitive positioning",
+            "Understanding of omnichannel customer experience strategy in large insurance organizations"
+          ]
+        },
+        {
+          "name": "Career Trajectory & Initiative",
+          "blocks": [
+            "Recognized by leadership for operating well beyond the scope of a Business Analyst role",
+            "Built relationships across technical, operational, and executive layers of the organization that would prove critical in the next role",
+            "Motivation to move faster and have greater product impact ultimately drove the decision to leave Unum for EvolutionIQ"
+          ]
+        }
+      ],
+      "impact_statements": [
+        {
+          "id": "ba-1",
+          "text": "Built a custom NLP classification engine (Python/spaCy) that improved email routing accuracy from ~25% to 92% across 16 service categories, replacing an outdated legacy system",
+          "tags": ["NLP", "spaCy", "Python", "classification", "production-deployment"]
+        },
+        {
+          "id": "ba-2",
+          "text": "Solution was deployed to production and validated by senior leadership to save the equivalent of 20+ FTEs previously spent manually rerouting misclassified service requests",
+          "tags": ["FTE-savings", "operational-efficiency", "production-deployment", "leadership-validation"]
+        },
+        {
+          "id": "ba-3",
+          "text": "Conducted formal build-vs-buy analysis and recommended outsourcing NLP classification to Usher, freeing internal data science resources for higher-value AI initiatives",
+          "tags": ["build-vs-buy", "vendor-evaluation", "strategic-recommendations"]
+        },
+        {
+          "id": "ba-4",
+          "text": "Led a 6–8 month POC with EvolutionIQ, working directly with their CEO to evaluate AI-powered claims maturity technology for Unum's disability portfolio",
+          "tags": ["POC", "EvolutionIQ", "vendor-evaluation", "claims-maturity"]
+        },
+        {
+          "id": "ba-5",
+          "text": "Advised the CTO on enterprise chatbot strategy, delivering a comparative analysis across competing internal approaches and recommending a cost-effective out-of-the-box solution; recommendation was adopted",
+          "tags": ["CTO-advisory", "chatbot-strategy", "executive-presentations", "strategic-recommendations"]
+        },
+        {
+          "id": "ba-6",
+          "text": "Supported cloud migration strategy for department-level data infrastructure, defining business justifications for moving on-premises data to AWS and Snowflake",
+          "tags": ["cloud-migration", "AWS", "Snowflake", "data-infrastructure"]
+        },
+        {
+          "id": "ba-7",
+          "text": "Evaluated multiple InsurTech vendors for business fit and ROI, establishing evaluation frameworks for AI/ML vendor assessment across the organization",
+          "tags": ["vendor-evaluation", "InsurTech", "evaluation-frameworks"]
+        }
+      ],
+      "tags": ["NLP", "spaCy", "Python", "classification-engine", "email-routing", "Salesforce", "build-vs-buy", "vendor-evaluation", "EvolutionIQ", "POC", "cloud-migration", "AWS", "Snowflake", "chatbot-strategy", "CTO-advisory", "executive-presentations", "FTE-savings", "operational-efficiency", "InsurTech", "production-deployment"]
+    },
+    {
+      "id": "unum-director-aiml",
+      "title": "Director, AI/ML Transformation",
+      "company": "Unum",
+      "location": "Portland, Maine",
+      "start_date": "2021-10",
+      "end_date": "2023-09",
+      "context": "First director-level AI/ML role at Unum. Led cross-functional AI initiatives across claims, fraud, governance, and operations. Wrote Unum's first AI governance framework and conducted the company's only two bias audits. Operated primarily through influence with limited direct reports.",
+      "categories": [
+        {
+          "name": "AI/ML Product Development",
+          "blocks": [
+            "Led the development of the Maverick program, AI-powered claims assistants deployed across STD, LTD, and other lines of business, each tailored to the specific decision-making needs of that product line",
+            "STD Claims Assistant: Architected a serverless AWS solution with a call button integrated into the CMS that pulled all claim data and ran it through a series of serverless functions and models, returning deterministic claim facts as unstructured tasks for examiners",
+            "STD Maverick saved Unum an estimated $20M/year in operational expenses by reducing examiner time spent on claim review by approximately 66%",
+            "LTD Core Models: Built predictive survivability models (claim duration forecasting) and claim surfacing models that prioritized claims for examiner review based on multiple extracted features",
+            "LTD models included explainable AI capabilities; built extractors that generated rationales alongside predictions, giving examiners deterministic reasoning rather than black-box outputs",
+            "Partnered with multiple data scientists throughout model development, testing, and deployment across all lines of business"
+          ]
+        },
+        {
+          "name": "Fraud Detection & Investigation",
+          "blocks": [
+            "Built Unum's first fraud detection models using SMOTE analysis on claims features indicative of fraudulent activity, partnering with data scientists, legal, and SIU teams",
+            "Models generated weekly lists of ~50 flagged claims for SIU investigation, complete with deterministic rationales explaining why each claim was flagged",
+            "SIU team reported excellent hit rates and high satisfaction with model output; LTD fraud exposure was estimated at ~$6M, which these models helped identify and investigate",
+            "Worked closely with legal to ensure fraud model outputs were defensible and aligned with investigation protocols"
+          ]
+        },
+        {
+          "name": "AI Governance & Responsible AI",
+          "blocks": [
+            "Authored Unum's first-ever AI governance framework from scratch (a 4–5 month effort) that became the company's adopted standard for responsible AI deployment",
+            "Partnered with Enterprise Risk Management, Legal, and Actuarial teams to establish the governance structure and assemble the AI governance team, serving as a founding member",
+            "Took extreme ownership of the governance document when organizational alignment was lacking, synthesizing competing perspectives into a cohesive framework that leadership adopted",
+            "Conducted the only two bias audits in Unum's history, both voluntary: STD audit with ORCA (Cathy O'Neil) and LTD audit with Northeastern University's ROOT Institute",
+            "Both audits confirmed models were free of bias issues and did not perpetuate historical data biases; no changes required",
+            "Established precedent for proactive, voluntary AI auditing at an enterprise insurance carrier before regulatory mandates"
+          ]
+        },
+        {
+          "name": "Cloud Architecture & Infrastructure",
+          "blocks": [
+            "Designed and deployed serverless AWS architecture for the Maverick STD claims assistant, enabling scalable, on-demand AI inference triggered directly from the CMS",
+            "Contributed to broader data modernization and cloud adoption efforts across the AI/ML team"
+          ]
+        },
+        {
+          "name": "Strategic Leadership & Cross-Functional Influence",
+          "blocks": [
+            "Led through influence across data science, engineering, legal, actuarial, Enterprise Risk Management, and SIU, meeting with cross-functional stakeholders multiple times per week",
+            "Managed limited direct reports while driving outcomes through a matrix organization spanning technical and business teams",
+            "Built relationships with external AI auditing organizations (ORCA, Northeastern ROOT) that positioned Unum at the forefront of responsible AI in insurance",
+            "Drove adoption of explainable AI principles across multiple product lines before XAI became an industry standard expectation"
+          ]
+        },
+        {
+          "name": "Domain Expertise",
+          "blocks": [
+            "Expert-level understanding of disability claims workflows across STD, LTD, IDI, and absence, applied directly to AI product design",
+            "Fraud detection in disability insurance: understanding of fraudulent claim indicators, investigation workflows, and legal defensibility requirements",
+            "AI governance in regulated industries: bias auditing, responsible AI frameworks, regulatory alignment",
+            "Explainable AI / XAI in insurance: building model outputs that examiners can trust and act on with deterministic rationales"
+          ]
+        }
+      ],
+      "impact_statements": [
+        {
+          "id": "dir-1",
+          "text": "Led development of the Maverick AI claims assistant program across multiple lines of business; the STD deployment alone saved Unum an estimated $20M/year in operational expenses by reducing examiner claim review time by ~66%",
+          "tags": ["Maverick", "claims-assistant", "operational-savings", "STD", "AI-product"]
+        },
+        {
+          "id": "dir-2",
+          "text": "Architected serverless AWS infrastructure for the STD claims assistant, integrating directly with the CMS to deliver deterministic claim facts to examiners on demand",
+          "tags": ["serverless-AWS", "CMS-integration", "architecture", "production"]
+        },
+        {
+          "id": "dir-3",
+          "text": "Built LTD predictive models including survivability analysis (claim duration forecasting) and claim surfacing with explainable AI; extractors generated rationales alongside predictions, replacing black-box outputs with actionable, trustworthy insights",
+          "tags": ["predictive-modeling", "survivability-analysis", "explainable-AI", "LTD"]
+        },
+        {
+          "id": "dir-4",
+          "text": "Developed Unum's first fraud detection models using SMOTE analysis, generating weekly investigative leads for SIU with deterministic rationales, helping identify and investigate an estimated $6M in LTD fraud exposure",
+          "tags": ["fraud-detection", "SMOTE", "SIU", "LTD", "investigation"]
+        },
+        {
+          "id": "dir-5",
+          "text": "Authored Unum's first AI governance framework from scratch over 4–5 months, partnering with Legal, ERM, and Actuarial to establish the company's adopted standard for responsible AI deployment",
+          "tags": ["AI-governance", "responsible-AI", "regulatory-alignment", "enterprise"]
+        },
+        {
+          "id": "dir-6",
+          "text": "Conducted the only two AI bias audits in Unum's history (both voluntary), partnering with ORCA (Cathy O'Neil) for STD and Northeastern's ROOT Institute for LTD; both audits confirmed models were bias-free",
+          "tags": ["bias-audit", "ORCA", "Northeastern-ROOT", "responsible-AI", "voluntary"]
+        },
+        {
+          "id": "dir-7",
+          "text": "Established precedent for proactive, voluntary AI auditing at an enterprise carrier before regulatory mandates, positioning Unum ahead of emerging AI accountability requirements",
+          "tags": ["AI-governance", "regulatory", "thought-leadership", "enterprise"]
+        },
+        {
+          "id": "dir-8",
+          "text": "Led through influence across data science, engineering, legal, actuarial, SIU, and ERM teams in a matrix organization, driving AI adoption and governance without direct authority over most stakeholders",
+          "tags": ["cross-functional-leadership", "matrix-org", "influence", "stakeholder-management"]
+        }
+      ],
+      "tags": ["AI-governance", "responsible-AI", "bias-audit", "ORCA", "Northeastern-ROOT", "Maverick", "claims-assistant", "serverless-AWS", "fraud-detection", "SMOTE", "SIU", "explainable-AI", "XAI", "survivability-analysis", "predictive-modeling", "STD", "LTD", "IDI", "CMS-integration", "operational-savings", "cross-functional-leadership", "matrix-org", "enterprise-risk-management", "regulatory-alignment"]
+    },
+    {
+      "id": "eiq-platform-solutions",
+      "title": "Director of Platform Solutions",
+      "company": "EvolutionIQ",
+      "location": "Manhattan, New York (Remote from Portland, Maine)",
+      "start_date": "2023-09",
+      "end_date": "2024-10",
+      "context": "First and only person in this role. Only team member with disability insurance domain expertise. Worked with 15+ of the largest disability carriers in the United States. Built change management and implementation methodology from scratch.",
+      "categories": [
+        {
+          "name": "Change Management & Implementation Leadership",
+          "blocks": [
+            "Designed and implemented EvolutionIQ's first change management and implementation methodology, as no structured approach existed previously",
+            "Built comprehensive frameworks, playbooks, and documentation for client implementations, many still in active use by successors",
+            "Shifted the company's client engagement model from product-centric demos to operations-centric implementation",
+            "Introduced process mapping, data dictionary collection, and training artifact requirements as standard implementation practices",
+            "Led clients through end-to-end implementations across STD and LTD as the primary point of contact with domain expertise"
+          ]
+        },
+        {
+          "name": "Client Portfolio & Revenue Impact",
+          "blocks": [
+            "Managed strategic relationships with 15+ major disability carriers including Sedgwick, Prudential, New York Life, Sun Life, Lincoln, MetLife, Disability RMS, Dearborn, UHC, Reliance, The Standard, Principal, and others",
+            "Led Sedgwick to a successful implementation that directly resulted in their expansion of EvolutionIQ products to Walmart, one of the largest employers in the United States",
+            "Served as the sole domain expert interfacing with carrier clients, as no other technical engagement manager had a disability insurance background"
+          ]
+        },
+        {
+          "name": "Domain Knowledge Transfer & Product Improvement",
+          "blocks": [
+            "Identified critical domain knowledge gaps across engineering and product teams, as the organization didn't understand foundational claims concepts like approved through date, payment dates, or how tasks function in claims workflows",
+            "Educated engineering and product teams on disability claims operations, business processes, and how products needed to integrate with carrier workflows",
+            "Domain knowledge transfer directly informed the development of new products including Duration Focus Core and Next Best Actions for LTD Core",
+            "Served as the bridge between carrier operational reality and EvolutionIQ's technical teams"
+          ]
+        },
+        {
+          "name": "Product Innovation (Apollo)",
+          "blocks": [
+            "Designed the Apollo product, an LLM-based alternative to EvolutionIQ's existing Needs Expert Review model, which used a black-box ML approach with ~5% accuracy",
+            "Apollo used LLMs to read unstructured claim data combined with domain expertise in claims triage patterns to predict specialist referral needs with explicit rationales",
+            "Achieved 80%+ accuracy in testing validated with multiple carriers, a massive improvement over the existing 5% baseline",
+            "Designed and prototyped within a few months; the greater challenge was internal organizational buy-in and data access limitations",
+            "Every carrier tested with responded positively; the function Apollo addresses is universally performed across the industry"
+          ]
+        },
+        {
+          "name": "Industry Presence & Thought Leadership",
+          "blocks": [
+            "Represents EvolutionIQ at major industry conferences including ICA, CHLA, and ECC",
+            "Speaks at conferences on AI/ML in disability insurance",
+            "Uses conference presence for relationship building with carrier leadership, competitive intelligence, and market feedback"
+          ]
+        }
+      ],
+      "impact_statements": [
+        {
+          "id": "ps-1",
+          "text": "Built EvolutionIQ's first change management and implementation methodology from scratch, creating frameworks, playbooks, and documentation still in active use by the team today",
+          "tags": ["change-management", "implementation", "playbooks", "frameworks", "founding"]
+        },
+        {
+          "id": "ps-2",
+          "text": "Managed strategic relationships with 15+ major disability carriers including Sedgwick, Prudential, New York Life, Sun Life, Lincoln, MetLife, and others as the only team member with disability insurance domain expertise",
+          "tags": ["carrier-relationships", "enterprise-clients", "domain-expertise", "disability-carriers"]
+        },
+        {
+          "id": "ps-3",
+          "text": "Led Sedgwick's implementation to success, directly resulting in product expansion to Walmart, one of the largest employers in the United States",
+          "tags": ["implementation", "revenue-expansion", "Sedgwick", "Walmart", "enterprise"]
+        },
+        {
+          "id": "ps-4",
+          "text": "Identified and closed critical domain knowledge gaps across engineering and product teams; knowledge transfer directly informed new product development including Duration Focus Core and Next Best Actions for LTD",
+          "tags": ["knowledge-transfer", "product-development", "domain-expertise", "engineering-collaboration"]
+        },
+        {
+          "id": "ps-5",
+          "text": "Designed the Apollo product using LLMs to replace a black-box ML model with ~5% accuracy, achieving 80%+ accuracy with explainable rationales, validated across multiple carrier tests",
+          "tags": ["Apollo", "LLM", "explainable-AI", "product-innovation", "accuracy-improvement"]
+        },
+        {
+          "id": "ps-6",
+          "text": "Shifted EvolutionIQ's client engagement model from product-centric demos to operations-centric implementations, introducing process mapping, data dictionaries, and training artifacts as standard practices",
+          "tags": ["change-management", "implementation-methodology", "process-improvement", "client-engagement"]
+        },
+        {
+          "id": "ps-7",
+          "text": "Speaks at major industry conferences (ICA, CHLA, ECC), representing the company and building carrier relationships as a recognized thought leader in AI/ML for disability insurance",
+          "tags": ["conference-speaker", "thought-leadership", "ICA", "CHLA", "ECC", "industry-presence"]
+        }
+      ],
+      "tags": ["change-management", "implementation", "playbooks", "carrier-relationships", "Sedgwick", "Walmart", "Prudential", "New-York-Life", "Sun-Life", "Lincoln", "MetLife", "disability-carriers", "domain-expertise", "knowledge-transfer", "Apollo", "LLM", "needs-expert-review", "explainable-AI", "claims-triage", "STD", "LTD", "product-innovation", "conference-speaker", "ICA", "CHLA", "ECC", "InsurTech", "thought-leadership"]
+    },
+    {
+      "id": "eiq-product-innovation",
+      "title": "Director of Product Innovation",
+      "company": "EvolutionIQ (acquired by CCC Intelligent Solutions)",
+      "location": "Manhattan, New York (Remote from Portland, Maine)",
+      "start_date": "2024-11",
+      "end_date": null,
+      "context": "Current role. Transitioned to Product Innovation to directly influence product quality and strategy. Functioning as a one-person product organization for a net-new absence management product line. Driving LLM innovation and maintaining industry thought leadership.",
+      "categories": [
+        {
+          "name": "Product Development: Absence Command Center",
+          "blocks": [
+            "Sole owner of a brand-new absence management product (the company's first), spanning STD, state leaves, FMLA, and customer handling",
+            "Performing every function: ontology design for policy rule extraction, solutions engineering for data handling, product design, UX wireframing, user story creation, problem statement development, discovery, business analysis, evaluation, and go-to-market fit",
+            "Designed the ontology for extracting policy rules from complex leave regulations (e.g., New York Paid Family Leave, FMLA)",
+            "Partnered with two of the largest absence carriers in the U.S. (Lincoln and New York Life) as initial design partners",
+            "Product is beyond initial MVP and progressing toward MVP v2, after which it will begin rolling out to live users",
+            "Brings in engineering resources for active build phases but owns the entire product concept, strategy, and execution independently"
+          ]
+        },
+        {
+          "name": "AI/ML Innovation: LLM Applications",
+          "blocks": [
+            "Continued and expanded Apollo work, which evolved from a single product initiative into broader LLM adoption across the company",
+            "Pioneered LLM-based approaches that enabled AI Labs engineers to apply LLMs to additional business problems",
+            "Designed and built the LLM layer for a leakage detection model, a hybrid ML + LLM system that identifies potentially incorrect claims approval decisions",
+            "Leakage model is in active development with multiple iterations of carrier testing and feedback",
+            "LLM work has shifted the company's product thinking toward explainability and hybrid ML/LLM architectures"
+          ]
+        },
+        {
+          "name": "Product Quality & Domain Knowledge Leadership",
+          "blocks": [
+            "Transitioned into Product Innovation specifically to address product quality gaps",
+            "Continued serving as the company's primary disability insurance domain expert",
+            "Bridged the gap between client expectations and product reality, moving into product to have direct influence over what gets built"
+          ]
+        },
+        {
+          "name": "Thought Leadership & Industry Presence",
+          "blocks": [
+            "Attended 6+ industry conferences across both EvolutionIQ roles; spoken at 3–4 conferences on AI/ML in disability insurance (ICA, CHLA, ECC)",
+            "Published 4–5 blog posts for the company on AI and disability insurance topics in the past year",
+            "Active LinkedIn presence writing about AI/ML, InsurTech, and disability insurance, driven by personal initiative",
+            "Represents the company to the carrier community as a recognized voice combining deep insurance domain expertise with AI/ML product knowledge"
+          ]
+        }
+      ],
+      "impact_statements": [
+        {
+          "id": "pi-1",
+          "text": "Sole owner of a net-new absence management product line (the company's first), covering STD, state leaves, FMLA, and customer handling; performing every function from ontology design and UX wireframing to discovery, business analysis, and go-to-market strategy",
+          "tags": ["absence-management", "product-ownership", "full-lifecycle", "FMLA", "state-leaves"]
+        },
+        {
+          "id": "pi-2",
+          "text": "Designed the regulatory ontology for policy rule extraction, enabling the system to interpret and apply complex leave regulations (NYPFL, FMLA, etc.) for automated absence administration",
+          "tags": ["ontology", "rule-extraction", "regulatory", "NYPFL", "FMLA", "automation"]
+        },
+        {
+          "id": "pi-3",
+          "text": "Partnered with two of the largest absence carriers in the U.S. as initial design partners; product is beyond MVP and progressing toward MVP v2 with live user rollout planned",
+          "tags": ["carrier-partnerships", "MVP", "product-development", "design-partners"]
+        },
+        {
+          "id": "pi-4",
+          "text": "Pioneered LLM adoption across the company; Apollo work evolved into broader LLM-based approaches now being applied by AI Labs engineers to multiple business problems",
+          "tags": ["LLM", "AI-innovation", "Apollo", "AI-Labs", "organizational-influence"]
+        },
+        {
+          "id": "pi-5",
+          "text": "Designed the LLM layer for a hybrid ML + LLM leakage detection model that identifies potentially incorrect claims approval decisions, currently in active carrier testing with iterative feedback loops",
+          "tags": ["leakage-detection", "hybrid-ML-LLM", "LLM", "claims-quality", "carrier-testing"]
+        },
+        {
+          "id": "pi-6",
+          "text": "Transitioned from client-facing to product role to directly address product quality gaps, serving as the company's primary disability insurance domain expert and coaching product/engineering teams",
+          "tags": ["product-quality", "domain-expertise", "knowledge-transfer", "product-leadership"]
+        },
+        {
+          "id": "pi-7",
+          "text": "Spoken at 3–4 major industry conferences (ICA, CHLA, ECC) and published 4–5 company blog posts on AI in disability insurance, building industry presence through personal initiative",
+          "tags": ["conference-speaker", "blog-writing", "thought-leadership", "personal-initiative"]
+        },
+        {
+          "id": "pi-8",
+          "text": "Attended 6+ conferences representing the company to carrier leadership, combining deep domain expertise with AI/ML product knowledge as a recognized InsurTech thought leader",
+          "tags": ["conferences", "industry-presence", "carrier-relationships", "thought-leadership"]
+        }
+      ],
+      "tags": ["absence-management", "Absence-Command-Center", "FMLA", "state-leaves", "NYPFL", "ontology", "rule-extraction", "product-innovation", "MVP", "LLM", "leakage-detection", "hybrid-ML-LLM", "Apollo", "AI-Labs", "product-quality", "domain-expertise", "conference-speaker", "thought-leadership", "blog-writing", "LinkedIn", "Lincoln", "New-York-Life", "full-product-lifecycle", "wireframes", "user-stories", "go-to-market", "solutions-engineering", "CCC-acquisition"]
+    }
+  ]
+}
