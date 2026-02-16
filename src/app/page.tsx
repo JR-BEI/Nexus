@@ -46,13 +46,13 @@ export default function Home() {
           <div className="flex gap-3">
             <button
               onClick={() => router.push('/analyze')}
-              className="px-8 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all hover:shadow-lg hover:shadow-blue-500/20 text-lg"
+              className="px-8 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all hover:shadow-lg hover:shadow-blue-500/20 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50"
             >
               + New Analysis
             </button>
             <button
               onClick={() => router.push('/build')}
-              className="px-8 py-4 bg-neutral-700 hover:bg-neutral-600 text-white font-semibold rounded-xl transition-all text-lg"
+              className="px-8 py-4 bg-neutral-700 hover:bg-neutral-600 text-white font-semibold rounded-xl transition-all text-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50"
             >
               🎙️ Build Repository
             </button>
@@ -90,13 +90,13 @@ export default function Home() {
                     <div className="flex gap-2 flex-shrink-0">
                       <button
                         onClick={() => handleViewAnalysis(analysis.id)}
-                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg transition-all font-medium"
+                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg transition-all font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                       >
                         View
                       </button>
                       <button
                         onClick={() => handleDeleteAnalysis(analysis.id)}
-                        className="px-4 py-2 bg-neutral-700 hover:bg-red-600 text-neutral-300 hover:text-white text-sm rounded-lg transition-all"
+                        className="px-4 py-2 bg-neutral-700 hover:bg-red-600 text-neutral-300 hover:text-white text-sm rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                       >
                         Delete
                       </button>

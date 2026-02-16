@@ -74,7 +74,7 @@ export default function BuildPage() {
           </div>
           <button
             onClick={() => router.push('/')}
-            className="px-4 py-2 text-neutral-400 hover:text-neutral-200 transition-colors rounded-lg hover:bg-neutral-800"
+            className="px-4 py-2 text-neutral-400 hover:text-neutral-200 transition-colors rounded-lg hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
           >
             ← Back to Home
           </button>
@@ -116,7 +116,7 @@ export default function BuildPage() {
               <textarea
                 value={editedTranscript}
                 onChange={(e) => setEditedTranscript(e.target.value)}
-                className="w-full h-64 px-4 py-3 bg-neutral-900 border border-neutral-700 rounded-xl text-neutral-100 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-all"
+                className="w-full h-64 px-4 py-3 bg-neutral-900 border border-neutral-700 rounded-xl text-neutral-100 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 resize-none transition-all"
               />
             </div>
             <div className="flex justify-center gap-3">
@@ -125,14 +125,14 @@ export default function BuildPage() {
                   setTranscript('')
                   setEditedTranscript('')
                 }}
-                className="px-6 py-3 bg-neutral-700 hover:bg-neutral-600 text-neutral-100 rounded-xl transition-all font-medium"
+                className="px-6 py-3 bg-neutral-700 hover:bg-neutral-600 text-neutral-100 rounded-xl transition-all font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/50"
               >
                 Start Over
               </button>
               <button
                 onClick={handleExtract}
                 disabled={loading || !editedTranscript.trim()}
-                className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 disabled:bg-neutral-700 disabled:text-neutral-500 disabled:cursor-not-allowed transition-all hover:shadow-lg hover:shadow-blue-500/20 flex items-center gap-2"
+                className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 disabled:bg-neutral-700 disabled:text-neutral-500 disabled:cursor-not-allowed transition-all hover:shadow-lg hover:shadow-blue-500/20 flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
               >
                 {loading ? (
                   <>
@@ -170,7 +170,7 @@ export default function BuildPage() {
                     onChange={(e) =>
                       setExtractedPosition({ ...extractedPosition, title: e.target.value })
                     }
-                    className="w-full px-4 py-2 bg-neutral-900 border border-neutral-700 rounded-lg text-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2 bg-neutral-900 border border-neutral-700 rounded-lg text-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
                   />
                 </div>
 
@@ -185,7 +185,7 @@ export default function BuildPage() {
                       onChange={(e) =>
                         setExtractedPosition({ ...extractedPosition, company: e.target.value })
                       }
-                      className="w-full px-4 py-2 bg-neutral-900 border border-neutral-700 rounded-lg text-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-4 py-2 bg-neutral-900 border border-neutral-700 rounded-lg text-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
                     />
                   </div>
                   <div>
@@ -198,7 +198,7 @@ export default function BuildPage() {
                       onChange={(e) =>
                         setExtractedPosition({ ...extractedPosition, location: e.target.value })
                       }
-                      className="w-full px-4 py-2 bg-neutral-900 border border-neutral-700 rounded-lg text-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-4 py-2 bg-neutral-900 border border-neutral-700 rounded-lg text-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
                     />
                   </div>
                 </div>
@@ -214,7 +214,7 @@ export default function BuildPage() {
                       onChange={(e) =>
                         setExtractedPosition({ ...extractedPosition, start_date: e.target.value })
                       }
-                      className="w-full px-4 py-2 bg-neutral-900 border border-neutral-700 rounded-lg text-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-4 py-2 bg-neutral-900 border border-neutral-700 rounded-lg text-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
                     />
                   </div>
                   <div>
@@ -230,7 +230,7 @@ export default function BuildPage() {
                           end_date: e.target.value || null
                         })
                       }
-                      className="w-full px-4 py-2 bg-neutral-900 border border-neutral-700 rounded-lg text-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-4 py-2 bg-neutral-900 border border-neutral-700 rounded-lg text-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
                     />
                   </div>
                 </div>
@@ -244,7 +244,7 @@ export default function BuildPage() {
                     onChange={(e) =>
                       setExtractedPosition({ ...extractedPosition, context: e.target.value })
                     }
-                    className="w-full px-4 py-2 bg-neutral-900 border border-neutral-700 rounded-lg text-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                    className="w-full px-4 py-2 bg-neutral-900 border border-neutral-700 rounded-lg text-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 resize-none"
                     rows={2}
                   />
                 </div>
@@ -284,13 +284,13 @@ export default function BuildPage() {
                   setTranscript('')
                   setEditedTranscript('')
                 }}
-                className="px-6 py-3 bg-neutral-700 hover:bg-neutral-600 text-neutral-100 rounded-xl transition-all font-medium"
+                className="px-6 py-3 bg-neutral-700 hover:bg-neutral-600 text-neutral-100 rounded-xl transition-all font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/50"
               >
                 Start Over
               </button>
               <button
                 onClick={handleSave}
-                className="px-8 py-3 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition-all hover:shadow-lg hover:shadow-green-500/20"
+                className="px-8 py-3 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition-all hover:shadow-lg hover:shadow-green-500/20 focus:outline-none focus:ring-2 focus:ring-green-500/50"
               >
                 Save to Repository
               </button>

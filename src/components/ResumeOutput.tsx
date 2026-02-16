@@ -42,7 +42,7 @@ export default function ResumeOutput({
       <div className="flex justify-end items-center gap-2 pb-2">
         <button
           onClick={handleCopy}
-          className="px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-100 text-sm rounded-lg transition-all font-medium"
+          className="px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-100 text-sm rounded-lg transition-all font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/50"
         >
           {copied ? '✓ Copied!' : 'Copy to Clipboard'}
         </button>
@@ -56,7 +56,7 @@ export default function ResumeOutput({
             />
           }
           fileName={fileName}
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg transition-all font-medium hover:shadow-lg hover:shadow-blue-500/20"
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg transition-all font-medium hover:shadow-lg hover:shadow-blue-500/20 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
         >
           {({ loading }) =>
             loading ? 'Preparing PDF...' : '↓ Download as PDF'

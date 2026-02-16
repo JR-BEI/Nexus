@@ -19,10 +19,17 @@ export default function AnalysisResults({
   if (loading) {
     return (
       <div className="w-full p-8 bg-neutral-800/50 rounded-xl border border-neutral-700/50">
-        <div className="flex flex-col items-center justify-center py-12 space-y-4">
+        <div className="flex flex-col items-center justify-center py-16 space-y-6">
           <Spinner size="lg" />
-          <div className="text-neutral-300 font-medium">Matching against repository...</div>
-          <div className="text-neutral-500 text-sm">This may take a few moments</div>
+          <div className="text-center space-y-2">
+            <div className="text-neutral-100 font-semibold text-lg">Matching against repository...</div>
+            <div className="text-neutral-400 text-sm">This may take a few moments</div>
+          </div>
+          <div className="flex gap-2 items-center">
+            <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
+            <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse delay-100"></div>
+            <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse delay-200"></div>
+          </div>
         </div>
       </div>
     )
@@ -85,38 +92,39 @@ export default function AnalysisResults({
 
       {/* Match Summary */}
       <div className="p-6 bg-green-500/5 rounded-xl border border-green-500/20">
-        <h2 className="text-xl font-semibold text-neutral-100 mb-3 flex items-center gap-2">
-          <span className="text-green-400">✓</span>
+        <h2 className="text-xl font-semibold text-neutral-100 mb-4 flex items-center gap-2">
+          <span className="text-green-400 text-2xl">✓</span>
           Overall Fit
         </h2>
-        <p className="text-neutral-300 leading-relaxed">{summary}</p>
+        <p className="text-neutral-300 leading-relaxed text-[15px]">{summary}</p>
       </div>
 
       {/* Matched Blocks */}
       <div className="p-6 bg-neutral-800/50 rounded-xl border border-neutral-700/50">
-        <h2 className="text-xl font-semibold text-neutral-100 mb-5">
+        <h2 className="text-xl font-semibold text-neutral-100 mb-6">
           Matched Experience <span className="text-neutral-400 text-base font-normal">({matchedBlocks.length} statements)</span>
         </h2>
-        <div className="space-y-3">
+        <div className="space-y-4">
           {matchedBlocks.map((block, i) => (
             <div
               key={i}
-              className="p-4 bg-neutral-900/50 rounded-xl border border-neutral-700/50 hover:border-neutral-600 transition-all"
+              className="p-5 bg-neutral-900/50 rounded-xl border border-neutral-700/50 hover:border-neutral-600 transition-all"
             >
               <div className="flex justify-between items-start gap-4 mb-3">
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-neutral-400">
+                  <p className="text-sm font-semibold text-neutral-300">
                     {block.company} <span className="text-neutral-600">·</span> {block.position_title}
                   </p>
                 </div>
-                <span className="px-2.5 py-1 bg-green-500/10 border border-green-500/30 text-green-300 text-xs rounded-lg font-semibold flex-shrink-0">
+                <span className="px-3 py-1 bg-green-500/10 border border-green-500/30 text-green-300 text-xs rounded-lg font-bold flex-shrink-0">
                   {block.relevance_score}% match
                 </span>
               </div>
-              <p className="text-neutral-100 mb-3 leading-relaxed">{block.statement_text}</p>
-              <p className="text-sm text-neutral-400 italic leading-relaxed">
-                💡 {block.match_reason}
-              </p>
+              <p className="text-neutral-100 mb-3 leading-relaxed text-[15px]">{block.statement_text}</p>
+              <div className="flex items-start gap-2 text-sm text-neutral-400 leading-relaxed">
+                <span className="text-blue-400 flex-shrink-0">💡</span>
+                <p className="italic">{block.match_reason}</p>
+              </div>
             </div>
           ))}
         </div>

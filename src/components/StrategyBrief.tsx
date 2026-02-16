@@ -17,10 +17,10 @@ export default function StrategyBrief({ content }: StrategyBriefProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-end items-center pb-2">
+      <div className="flex justify-end items-center gap-2 pb-2">
         <button
           onClick={handleCopy}
-          className="px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-100 text-sm rounded-lg transition-all font-medium"
+          className="px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-100 text-sm rounded-lg transition-all font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/50"
         >
           {copied ? '✓ Copied!' : 'Copy to Clipboard'}
         </button>

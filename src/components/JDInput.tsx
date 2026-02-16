@@ -36,7 +36,7 @@ export default function JDInput({ onAnalyze, loading }: JDInputProps) {
             value={jobDescription}
             onChange={(e) => setJobDescription(e.target.value)}
             placeholder="Paste the full job description here..."
-            className="w-full h-96 px-4 py-3 bg-neutral-800 border border-neutral-700 rounded-xl text-neutral-100 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-all"
+            className="w-full h-96 px-4 py-3 bg-neutral-800 border border-neutral-700 rounded-xl text-neutral-100 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 resize-none transition-all"
             disabled={loading}
           />
           <div className="mt-2 flex items-center justify-between text-xs text-neutral-500">

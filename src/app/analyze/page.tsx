@@ -205,7 +205,7 @@ export default function AnalyzePage() {
           </div>
           <button
             onClick={() => router.push('/')}
-            className="px-4 py-2 text-neutral-400 hover:text-neutral-200 transition-colors rounded-lg hover:bg-neutral-800"
+            className="px-4 py-2 text-neutral-400 hover:text-neutral-200 transition-colors rounded-lg hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
           >
             ← Back to Home
           </button>
@@ -326,7 +326,7 @@ export default function AnalyzePage() {
               <button
                 onClick={handleGenerateOutputs}
                 disabled={loading}
-                className="px-10 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 disabled:bg-neutral-700 disabled:text-neutral-500 disabled:cursor-not-allowed transition-all hover:shadow-lg hover:shadow-blue-500/20 flex items-center gap-2"
+                className="px-10 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 disabled:bg-neutral-700 disabled:text-neutral-500 disabled:cursor-not-allowed transition-all hover:shadow-lg hover:shadow-blue-500/20 flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
               >
                 {loading ? (
                   <>
@@ -426,7 +426,7 @@ export default function AnalyzePage() {
                         // Trigger analysis automatically
                         setTimeout(() => handleAnalyzeJD(jobDescription), 100)
                       }}
-                      className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all font-medium hover:shadow-lg hover:shadow-blue-500/20"
+                      className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all font-medium hover:shadow-lg hover:shadow-blue-500/20 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                     >
                       Re-analyze
                     </button>
@@ -436,7 +436,7 @@ export default function AnalyzePage() {
                       setViewingAnalysisId(null)
                       router.push('/analyze')
                     }}
-                    className="px-6 py-3 bg-neutral-700 hover:bg-neutral-600 text-neutral-100 rounded-xl transition-all font-medium"
+                    className="px-6 py-3 bg-neutral-700 hover:bg-neutral-600 text-neutral-100 rounded-xl transition-all font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                   >
                     Start New Analysis
                   </button>

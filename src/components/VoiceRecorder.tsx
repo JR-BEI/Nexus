@@ -90,10 +90,10 @@ export default function VoiceRecorder({ onTranscript, loading = false }: VoiceRe
       <button
         onClick={isRecording ? stopRecording : startRecording}
         disabled={loading}
-        className={`w-32 h-32 rounded-full flex items-center justify-center transition-all ${
+        className={`w-32 h-32 rounded-full flex items-center justify-center transition-all focus:outline-none focus:ring-4 ${
           isRecording
-            ? 'bg-red-500 hover:bg-red-600 animate-pulse'
-            : 'bg-blue-600 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/20'
+            ? 'bg-red-500 hover:bg-red-600 animate-pulse focus:ring-red-500/30'
+            : 'bg-blue-600 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/20 focus:ring-blue-500/30'
         } ${
           loading ? 'opacity-50 cursor-not-allowed' : ''
         }`}
