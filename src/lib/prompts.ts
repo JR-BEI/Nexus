@@ -34,7 +34,7 @@ Candidate Repository:
 ${JSON.stringify(repository, null, 2)}
 
 Your task:
-1. Review each position and impact statement in the repository
+1. Review EVERY position and impact statement in the repository
 2. Select the statements that best match the job requirements
 3. For each selected statement, explain WHY it's relevant
 4. Prioritize:
@@ -42,6 +42,7 @@ Your task:
    - Quantifiable outcomes
    - Statements that address key themes
    - Transferable experience
+5. IMPORTANT: Include statements from ALL positions in the repository, including early career roles (2015-2018). Even if a position is older, include 1-2 statements that demonstrate foundational skills or relevant domain expertise.
 
 Return a JSON object with this structure:
 {
@@ -60,7 +61,7 @@ Return a JSON object with this structure:
   "summary": "1-2 paragraph summary of the candidate's overall fit for this role"
 }
 
-Select 10-15 of the BEST matches. Quality over quantity.
+Select 18-25 statements total, ensuring EVERY position in the repository is represented with at least 1-2 statements. Recent positions (last 5 years) should have 4-5 statements each, older positions should have 2-3 statements each.
 Return ONLY the JSON object, no additional text.`
 }
 
@@ -83,18 +84,25 @@ ${JSON.stringify(matchedBlocks, null, 2)}
 Requirements:
 1. Format as a clean, professional resume in markdown
 2. Use ONLY the provided impact statements - do not invent or embellish
-3. Structure by position (most recent first)
-4. Prioritize the most relevant statements for each position
-5. Keep to 1-2 pages worth of content
-6. Include: header with contact info, education, and work experience
-7. Do NOT include a summary/objective section
-8. Do not use em dashes (—) anywhere in the output. Use commas, semicolons, periods, or rewrite the sentence instead. The tone should feel human-written, not AI-generated.
+3. Structure: Professional Summary (2-3 sentences), Experience (by position, most recent first), Education
+4. Include ALL positions from the matched blocks - do not skip any positions
+5. Bullets per position:
+   - Recent positions (2020-present): 4-5 bullets each
+   - Mid-career positions (2018-2020): 3-4 bullets each
+   - Early career positions (before 2018): 2-3 bullets each
+6. Keep to 1-2 pages worth of content
+7. Include a PROFESSIONAL SUMMARY section that is a 2-3 sentence tailored summary. When mentioning years of experience, calculate accurately from the earliest position start date in the repository to present (e.g., if earliest position started in 2015, that's 10+ years as of 2025, not 5+).
+8. Do not use em dashes (—) OR en dashes (–) anywhere in the output. Replace with regular hyphens (-), commas, semicolons, or rewrite the sentence. The tone should feel human-written, not AI-generated.
+9. For position headers, use this EXACT format: ### Job Title | Company Name | Start Date - End Date (note: use regular hyphen for date ranges, not en-dash)
 
 Format:
-- Use ## for section headers (e.g., ## Experience, ## Education)
-- Use ### for position titles
+- Use ## for section headers (## Professional Summary, ## Experience, ## Education)
+- For positions, use ### followed by: Job Title | Company Name | Start Date - End Date
 - Use bullet points (-) for impact statements
-- Bold company names and dates
+- Do NOT use bold markers (**) anywhere except in section headers
+- Dates should be in "Month YYYY - Month YYYY" or "Month YYYY - Present" format (regular hyphen, not en-dash)
+- Do NOT include any standalone date lines or company name lines outside of the position header
+- Replace "4–5 months" with "4-5 months", "10,000–50,000" with "10,000-50,000", etc.
 
 Return the resume content in markdown format.`
 }

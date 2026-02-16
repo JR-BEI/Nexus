@@ -10,12 +10,14 @@ import type { Repository, MatchedBlock } from '@/types'
 interface ResumeOutputProps {
   content: string
   companyName?: string
+  jobTitle?: string
   matchedBlocks: MatchedBlock[]
 }
 
 export default function ResumeOutput({
   content,
   companyName,
+  jobTitle,
   matchedBlocks
 }: ResumeOutputProps) {
   const [copied, setCopied] = useState(false)
@@ -30,12 +32,16 @@ export default function ResumeOutput({
   const parsedResume = parseMarkdownResume(content)
   const repository = repositoryData as Repository
 
-  // Generate filename: JR_Resume_CompanyName_YYYY-MM-DD.pdf
+  // Generate filename: JR_Resume_CompanyName_YYYY-MM-DD.pdf or JR_Resume_JobTitle_YYYY-MM-DD.pdf
   const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD
-  const sanitizedCompany = companyName
+  const filenamePart = companyName
     ? companyName.replace(/[^a-zA-Z0-9]/g, '_')
-    : 'Company'
-  const fileName = `JR_Resume_${sanitizedCompany}_${today}.pdf`
+    : jobTitle
+    ? jobTitle.replace(/[^a-zA-Z0-9]/g, '_')
+    : ''
+  const fileName = filenamePart
+    ? `JR_Resume_${filenamePart}_${today}.pdf`
+    : `JR_Resume_${today}.pdf`
 
   return (
     <div className="space-y-4">

@@ -401,6 +401,7 @@ export default function AnalyzePage() {
                   <ResumeOutput
                     content={resume}
                     companyName={jdAnalysis?.company}
+                    jobTitle={jdAnalysis?.role_title}
                     matchedBlocks={matchedBlocks}
                   />
                 )}

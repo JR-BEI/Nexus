@@ -55,9 +55,17 @@ const styles = StyleSheet.create({
     marginTop: 16,
     marginBottom: 8
   },
+  // SUMMARY STYLES
+  summaryText: {
+    fontFamily: 'Helvetica',
+    fontSize: 9.5,
+    color: '#333333',
+    lineHeight: 1.4,
+    marginBottom: 4
+  },
   // POSITION STYLES
   positionBlock: {
-    marginBottom: 16
+    marginBottom: 14
   },
   positionHeader: {
     flexDirection: 'row',
@@ -79,7 +87,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Helvetica',
     fontSize: 10,
     color: '#333333',
-    marginBottom: 8
+    marginBottom: 6
   },
   // BULLET STYLES
   bulletContainer: {
@@ -137,40 +145,53 @@ export default function ResumePDF({
   matchedBlocks,
   repository
 }: ResumePDFProps) {
-  // Group matched blocks by position to get metadata
-  const positionMetadata: Record<string, { company: string; dates: string }> = {}
+  // Build complete list of positions from matched blocks
+  // Group matched blocks by position
+  const positionMap = new Map<string, {
+    id: string
+    title: string
+    company: string
+    dates: string
+    bullets: string[]
+  }>()
 
   matchedBlocks.forEach((block) => {
     const position = repository.positions.find((p) => p.id === block.position_id)
-    if (position && !positionMetadata[block.position_id]) {
-      // Format dates: "Start Date – End Date" or "Start Date – Present"
-      const startDate = formatDate(position.start_date)
-      const endDate = position.end_date ? formatDate(position.end_date) : 'Present'
+    if (!position) return
 
-      positionMetadata[block.position_id] = {
+    // Format dates (use regular hyphen, not en-dash)
+    const startDate = formatDate(position.start_date)
+    const endDate = position.end_date ? formatDate(position.end_date) : 'Present'
+    const dates = `${startDate} - ${endDate}`
+
+    if (!positionMap.has(block.position_id)) {
+      positionMap.set(block.position_id, {
+        id: block.position_id,
+        title: block.position_title,
         company: position.company,
-        dates: `${startDate} – ${endDate}`
-      }
+        dates,
+        bullets: []
+      })
+    }
+
+    // Add the statement to this position's bullets (filter out en/em-dashes)
+    const pos = positionMap.get(block.position_id)!
+    const cleanStatement = block.statement_text
+      .replace(/—/g, '-')  // Replace em-dashes with regular hyphens
+      .replace(/–/g, '-')  // Replace en-dashes with regular hyphens
+    if (!pos.bullets.includes(cleanStatement)) {
+      pos.bullets.push(cleanStatement)
     }
   })
 
-  // Match parsed positions with metadata
-  const enrichedPositions = parsedResume.positions.map((parsed) => {
-    // Try to find matching position by title
-    const matchingBlock = matchedBlocks.find((block) =>
-      block.position_title.includes(parsed.title) ||
-      parsed.title.includes(block.position_title)
-    )
+  // Convert map to array and sort by date (most recent first)
+  const enrichedPositions = Array.from(positionMap.values()).sort((a, b) => {
+    const posA = repository.positions.find(p => p.id === a.id)
+    const posB = repository.positions.find(p => p.id === b.id)
+    if (!posA || !posB) return 0
 
-    if (matchingBlock && positionMetadata[matchingBlock.position_id]) {
-      return {
-        ...parsed,
-        company: positionMetadata[matchingBlock.position_id].company,
-        dates: positionMetadata[matchingBlock.position_id].dates
-      }
-    }
-
-    return parsed
+    // Compare start dates, most recent first
+    return posB.start_date.localeCompare(posA.start_date)
   })
 
   return (
@@ -185,13 +206,21 @@ export default function ResumePDF({
         </View>
         <View style={styles.headerRule} />
 
+        {/* PROFESSIONAL SUMMARY */}
+        {parsedResume.summary && (
+          <View>
+            <Text style={styles.sectionHeader}>PROFESSIONAL SUMMARY</Text>
+            <Text style={styles.summaryText}>{parsedResume.summary}</Text>
+          </View>
+        )}
+
         {/* EXPERIENCE SECTION */}
         <View>
           <Text style={styles.sectionHeader}>EXPERIENCE</Text>
           {enrichedPositions.map((position, index) => (
-            <View key={index} style={styles.positionBlock} wrap={false}>
+            <View key={index} style={styles.positionBlock}>
               {/* Company name and dates on same line */}
-              <View style={styles.positionHeader}>
+              <View style={styles.positionHeader} wrap={false}>
                 <Text style={styles.companyName}>{position.company}</Text>
                 <Text style={styles.dates}>{position.dates}</Text>
               </View>
