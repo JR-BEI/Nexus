@@ -9,30 +9,38 @@ import Spinner from './Spinner'
 interface JDInputProps {
   onAnalyze: (jobDescription: string) => void
   loading: boolean
+  /** Pre-populate the textarea (e.g. when continuing a draft). */
+  initialValue?: string
+  /** Notified on every keystroke so the parent can autosave drafts. */
+  onTextChange?: (text: string) => void
 }
 
 const DRAFT_KEY = 'nexus.draft.jd'
 
-export default function JDInput({ onAnalyze, loading }: JDInputProps) {
-  const [jobDescription, setJobDescription] = useState('')
+export default function JDInput({ onAnalyze, loading, initialValue, onTextChange }: JDInputProps) {
+  const [jobDescription, setJobDescription] = useState(initialValue ?? '')
 
-  // Restore draft on mount
+  // Restore legacy draft on mount only when no parent-supplied initial value.
   useEffect(() => {
+    if (initialValue !== undefined) return
     try {
       const draft = localStorage.getItem(DRAFT_KEY)
       if (draft) setJobDescription(draft)
     } catch {
       // ignore
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Persist draft on every change
+  // Persist legacy draft + notify parent on every change.
   useEffect(() => {
     try {
       localStorage.setItem(DRAFT_KEY, jobDescription)
     } catch {
       // ignore quota errors
     }
+    onTextChange?.(jobDescription)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jobDescription])
 
   const handleSubmit = (e: React.FormEvent) => {

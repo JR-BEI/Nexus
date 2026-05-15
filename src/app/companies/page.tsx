@@ -1,13 +1,15 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import watchlist from '@/data/watchlist.json'
-import { Target, MapPin, BarChart3, ArrowUpRight } from 'lucide-react'
+import { Target, MapPin, BarChart3, ArrowUpRight, Sparkles, FileText } from 'lucide-react'
 import { PageShell } from '@/components/ui/PageShell'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { fitTier, careersHref } from '@/lib/companies'
+import { companyIdFromName } from '@/lib/context/companyContext'
+import { analysisRepo } from '@/lib/repos/analysisRepo'
 import {
   Select,
   SelectContent,
@@ -28,6 +30,19 @@ const LIST_LABELS: Record<ListFilter, string> = {
 
 export default function CompaniesPage() {
   const [listFilter, setListFilter] = useState<ListFilter>('all')
+  const [analysisCounts, setAnalysisCounts] = useState<Record<string, number>>({})
+
+  useEffect(() => {
+    analysisRepo.list().then((all) => {
+      const counts: Record<string, number> = {}
+      for (const a of all) {
+        if (a.linkedCompanyId) {
+          counts[a.linkedCompanyId] = (counts[a.linkedCompanyId] || 0) + 1
+        }
+      }
+      setAnalysisCounts(counts)
+    })
+  }, [])
   const [categoryFilter, setCategoryFilter] = useState<string>('all')
   const [atsFilter, setAtsFilter] = useState<string>('all')
   const [minFit, setMinFit] = useState<number>(0)
@@ -196,6 +211,14 @@ export default function CompaniesPage() {
             {filtered.map((e, i) => {
               const href = careersHref(e.careers_url)
               const tier = fitTier(e.fit_score)
+              const companyId = companyIdFromName(e.company)
+              const analysisCount = analysisCounts[companyId] ?? 0
+              const analyzeQuery: Record<string, string> = {
+                companyId,
+                company: e.company,
+                vertical: e.list,
+              }
+              if (href) analyzeQuery.careersUrl = href
               return (
                 <article key={`${e.list}-${e.company}-${i}`} className="company-card">
                   <div className="company-card-main">
@@ -237,10 +260,30 @@ export default function CompaniesPage() {
                         </p>
                       )}
                       {e.notes && <p className="company-note">{e.notes}</p>}
+
+                      {analysisCount > 0 && (
+                        <Link
+                          href={{ pathname: '/analyze', query: { companyId } }}
+                          className="inline-flex items-center gap-1 text-xs text-[var(--accent-blue)] hover:underline mt-2"
+                        >
+                          <FileText className="size-3" />
+                          {analysisCount} analysis{analysisCount !== 1 ? 'es' : ''}
+                        </Link>
+                      )}
                     </div>
 
                     <div className="company-actions">
                       {e.ats && <span className="company-ats">{e.ats}</span>}
+                      <Link href={{ pathname: '/analyze', query: analyzeQuery }}>
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          className="text-[var(--accent-blue)] border-blue-500/30 bg-blue-500/10 hover:bg-blue-500/15"
+                        >
+                          <Sparkles className="size-3.5 mr-1" />
+                          Analyze
+                        </Button>
+                      </Link>
                       <Link
                         href={{
                           pathname: '/tracker',

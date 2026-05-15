@@ -7,6 +7,7 @@ import { Compass } from 'lucide-react'
 import { PageShell } from '@/components/ui/PageShell'
 import { ReadingProgress } from '@/components/strategy/ReadingProgress'
 import { StrategyTOC, type TocSection } from '@/components/strategy/StrategyTOC'
+import { StrategyPlaybook } from '@/components/strategy/StrategyPlaybook'
 import { slugify } from '@/lib/slugify'
 
 function extractToc(md: string): TocSection[] {
@@ -67,6 +68,23 @@ export default function StrategyView({ markdown }: { markdown: string }) {
         backHref="/"
         backLabel="Back to Home"
       >
+        <section className="page-content-section max-w-5xl mx-auto px-6">
+          <div className="rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-5 mb-8">
+            <div className="flex items-baseline justify-between mb-1">
+              <h2 className="text-lg font-semibold text-[var(--text-primary)]">
+                Recruiter & contact playbook
+              </h2>
+              <span className="text-xs text-[var(--text-tertiary)]">
+                Track outreach status and notes per contact
+              </span>
+            </div>
+            <p className="text-sm text-[var(--text-secondary)] mb-4">
+              Curated firms + your own additions. Status changes save instantly and stay in your browser.
+            </p>
+            <StrategyPlaybook />
+          </div>
+        </section>
+
         <section className="page-content-section">
           <div className="strategy-layout">
             <aside className="strategy-toc">

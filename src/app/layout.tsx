@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
+import { MigrationRunner } from "@/components/MigrationRunner";
+import { CommandPalette } from "@/components/CommandPalette";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -29,6 +31,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <MigrationRunner />
+        <CommandPalette />
         <TooltipProvider>{children}</TooltipProvider>
         <Toaster />
       </body>

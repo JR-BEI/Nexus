@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import type { Analysis, Application } from '@/types'
+import type { Analysis as LegacyAnalysis, Application } from '@/types'
 import { APPLICATION_STATUSES } from '@/lib/tracker'
+import { applicationRepo } from '@/lib/repos/applicationRepo'
 import {
   Sparkles,
   ClipboardList,
@@ -15,21 +16,28 @@ import {
 import AuroraBackground from '@/components/ui/AuroraBackground'
 import AnimatedGridPattern from '@/components/ui/AnimatedGridPattern'
 import BentoCard from '@/components/ui/BentoCard'
+import { TodaySection } from '@/components/home/TodaySection'
+import { UpcomingSection } from '@/components/home/UpcomingSection'
+import { QuickStats } from '@/components/home/QuickStats'
+import { HotkeyHint } from '@/components/home/HotkeyHint'
+import type { TrackerApplication } from '@/types/nexus'
 
 export default function Home() {
   const router = useRouter()
-  const [analyses, setAnalyses] = useState<Analysis[]>([])
-  const [applications, setApplications] = useState<Application[]>([])
+  const [analyses, setAnalyses] = useState<LegacyAnalysis[]>([])
+  const [legacyApplications, setLegacyApplications] = useState<Application[]>([])
+  const [newApplications, setNewApplications] = useState<TrackerApplication[]>([])
 
   useEffect(() => {
     try {
       const a = localStorage.getItem('analyses')
       if (a) setAnalyses(JSON.parse(a))
       const apps = localStorage.getItem('tracker.applications')
-      if (apps) setApplications(JSON.parse(apps))
+      if (apps) setLegacyApplications(JSON.parse(apps))
     } catch (error) {
       console.error('Error loading from localStorage:', error)
     }
+    applicationRepo.list().then(setNewApplications)
   }, [])
 
   const handleDeleteAnalysis = (id: string) => {
@@ -43,9 +51,15 @@ export default function Home() {
   }
 
   const statusFor = (analysisId: string) => {
-    const app = applications.find((a) => a.analysis_id === analysisId)
-    if (!app) return null
-    return APPLICATION_STATUSES.find((s) => s.value === app.status) ?? null
+    // Prefer the new repo (any analysis tracked since Phase 1 lives here).
+    const newApp = newApplications.find((a) => a.linkedAnalysisId === analysisId)
+    if (newApp) {
+      const mapped = newApp.status === 'on-hold' ? 'on_hold' : newApp.status
+      return APPLICATION_STATUSES.find((s) => s.value === mapped) ?? null
+    }
+    const legacy = legacyApplications.find((a) => a.analysis_id === analysisId)
+    if (!legacy) return null
+    return APPLICATION_STATUSES.find((s) => s.value === legacy.status) ?? null
   }
 
   return (
@@ -55,7 +69,7 @@ export default function Home() {
 
       <div className="relative z-10">
         {/* ─── Hero ─────────────────────────────────────────────── */}
-        <section className="page-content-section relative px-6 pt-20 pb-16 md:pt-28 md:pb-20">
+        <section className="page-content-section relative px-6 pt-20 pb-10 md:pt-28 md:pb-12">
           <AuroraBackground />
           <div className="relative max-w-5xl mx-auto text-center flex flex-col items-center">
             <div className="status-pill mb-6">
@@ -68,11 +82,15 @@ export default function Home() {
             <p className="text-lg md:text-xl text-[var(--text-secondary)] max-w-2xl mx-auto">
               Tailor resumes, hunt the right roles, track every conversation — all in one workspace built for executive job searches.
             </p>
+            <QuickStats />
           </div>
         </section>
 
+        {/* ─── Today ────────────────────────────────────────────── */}
+        <TodaySection />
+
         {/* ─── Bento Grid ──────────────────────────────────────── */}
-        <section className="page-content-section max-w-6xl mx-auto px-6 pb-16">
+        <section className="page-content-section max-w-6xl mx-auto px-6 pb-10">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr">
             <BentoCard
               icon={<Sparkles className="size-7" strokeWidth={1.5} />}
@@ -113,6 +131,9 @@ export default function Home() {
             />
           </div>
         </section>
+
+        {/* ─── Upcoming ─────────────────────────────────────────── */}
+        <UpcomingSection />
 
         {/* ─── Past Analyses ──────────────────────────────────── */}
         <section className="page-content-section max-w-6xl mx-auto px-6 pb-20">
@@ -189,6 +210,7 @@ export default function Home() {
           )}
         </section>
       </div>
+      <HotkeyHint />
     </div>
   )
 }

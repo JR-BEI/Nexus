@@ -12,7 +12,6 @@ import { PageShell } from '@/components/ui/PageShell'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { exportAll, importAll } from '@/lib/tracker'
-import type { Application } from '@/types'
 
 type Tab = 'applications' | 'contacts' | 'appointments' | 'notes'
 
@@ -35,7 +34,8 @@ function TrackerInner() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [tab, setTab] = useState<Tab>('applications')
-  const [seedApp, setSeedApp] = useState<Partial<Application> | null>(null)
+  const [seedApp, setSeedApp] = useState<{ company?: string; role?: string; source?: string } | null>(null)
+  const [openAppId, setOpenAppId] = useState<string | null>(null)
 
   useEffect(() => {
     if (searchParams.get('new_app') === '1') {
@@ -44,13 +44,12 @@ function TrackerInner() {
         company: searchParams.get('company') ?? '',
         role: searchParams.get('role') ?? '',
         source: searchParams.get('source') ?? '',
-        jd_url: searchParams.get('jd_url') ?? '',
-        status: 'interested',
-        applied_date: null,
-        salary_target: '',
-        contact_ids: [],
-        notes: '',
       })
+    }
+    const appParam = searchParams.get('app')
+    if (appParam) {
+      setTab('applications')
+      setOpenAppId(appParam)
     }
   }, [searchParams])
 
@@ -121,6 +120,11 @@ function TrackerInner() {
               seedNew={seedApp}
               onSeedConsumed={() => {
                 setSeedApp(null)
+                router.replace('/tracker', { scroll: false })
+              }}
+              openAppId={openAppId}
+              onOpenConsumed={() => {
+                setOpenAppId(null)
                 router.replace('/tracker', { scroll: false })
               }}
             />

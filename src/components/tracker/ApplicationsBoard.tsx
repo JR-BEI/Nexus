@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   DndContext,
   DragOverlay,
@@ -12,93 +12,217 @@ import {
   type DragEndEvent,
   type DragStartEvent,
 } from '@dnd-kit/core'
-import {
-  APPLICATION_STATUSES,
-  useApplications,
-  useAppointments,
-  useContacts,
-  useAnalyses,
-} from '@/lib/tracker'
-import { Calendar, FileText, Lightbulb, Users } from 'lucide-react'
+import { Calendar, FileText, Lightbulb, Users, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import type { Application, ApplicationStatus, Appointment, Contact, Analysis } from '@/types'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog'
+import { Textarea } from '@/components/ui/textarea'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { applicationRepo } from '@/lib/repos/applicationRepo'
+import { contactRepo } from '@/lib/repos/contactRepo'
+import { analysisRepo } from '@/lib/repos/analysisRepo'
+import { newApplicationId, newEventId } from '@/lib/id'
+import { searchApplications, type SearchableApp } from '@/lib/search'
+import { getLastActivityAt, getStaleness, trackerStatusLabel } from '@/lib/staleness'
+import { formatRelativeDate } from '@/lib/format'
+import type {
+  Analysis,
+  ApplicationStatus,
+  TrackerApplication,
+  TrackerContact,
+} from '@/types/nexus'
+import { NeedsAttention } from './NeedsAttention'
+import { LogActivityModal } from './LogActivityModal'
+import { ClosedColumn, ClosedExpanded } from './ClosedLane'
 
 const DRAG_HINT_KEY = 'nexus.tracker.dragHintDismissed'
 
-const blankApp = (): Omit<Application, 'id' | 'created_at' | 'updated_at'> => ({
-  company: '',
-  role: '',
-  status: 'interested',
-  applied_date: null,
-  jd_url: '',
-  source: '',
-  salary_target: '',
-  contact_ids: [],
-  notes: '',
-})
+const ACTIVE_COLUMNS: { id: ApplicationStatus; label: string; hex: string }[] = [
+  { id: 'interested', label: 'Interested', hex: '#6366F1' },
+  { id: 'applied', label: 'Applied', hex: '#3B82F6' },
+  { id: 'screening', label: 'Screening', hex: '#14B8A6' },
+  { id: 'interviewing', label: 'Interviewing', hex: '#A855F7' },
+  { id: 'offer', label: 'Offer', hex: '#10B981' },
+]
 
-interface Props {
-  seedNew?: Partial<Application> | null
-  onSeedConsumed?: () => void
+const CLOSED_STATUSES: ApplicationStatus[] = ['rejected', 'on-hold']
+
+interface SeedApp {
+  company?: string
+  role?: string
+  source?: string
 }
 
-export default function ApplicationsBoard({ seedNew, onSeedConsumed }: Props) {
-  const apps = useApplications()
-  const { items: contacts } = useContacts()
-  const { items: appointments } = useAppointments()
-  const analyses = useAnalyses()
+interface Props {
+  seedNew?: SeedApp | null
+  onSeedConsumed?: () => void
+  /** Application id to auto-open from a query param. */
+  openAppId?: string | null
+  onOpenConsumed?: () => void
+}
 
-  const [editing, setEditing] = useState<Application | null>(null)
-  const [showNew, setShowNew] = useState(false)
-  const [seedData, setSeedData] = useState<Partial<Application> | null>(null)
+export default function ApplicationsBoard({
+  seedNew,
+  onSeedConsumed,
+  openAppId,
+  onOpenConsumed,
+}: Props) {
+  const [apps, setApps] = useState<TrackerApplication[]>([])
+  const [contacts, setContacts] = useState<TrackerContact[]>([])
+  const [analyses, setAnalyses] = useState<Analysis[]>([])
+  const [loaded, setLoaded] = useState(false)
   const [filter, setFilter] = useState('')
+  const [searchResults, setSearchResults] = useState<SearchableApp[] | null>(null)
+  const [editing, setEditing] = useState<TrackerApplication | null>(null)
+  const [creating, setCreating] = useState<SeedApp | null>(null)
+  const [logTarget, setLogTarget] = useState<TrackerApplication | null>(null)
+  const [closedExpanded, setClosedExpanded] = useState(false)
   const [activeId, setActiveId] = useState<string | null>(null)
   const [hintDismissed, setHintDismissed] = useState(true)
 
+  // Initial load.
   useEffect(() => {
+    Promise.all([applicationRepo.list(), contactRepo.list(), analysisRepo.list()]).then(
+      ([a, c, an]) => {
+        setApps(a)
+        setContacts(c)
+        setAnalyses(an)
+        setLoaded(true)
+      }
+    )
     try {
-      setHintDismissed(localStorage.getItem(DRAG_HINT_KEY) === '1')
+      setHintDismissed(window.localStorage.getItem(DRAG_HINT_KEY) === '1')
     } catch {
       // ignore
     }
   }, [])
 
+  // Honor ?new_app=1&company=...&source=... from the Companies page.
+  useEffect(() => {
+    if (seedNew && loaded) {
+      setCreating(seedNew)
+      onSeedConsumed?.()
+    }
+  }, [seedNew, loaded, onSeedConsumed])
+
+  // Honor ?app=<id> from anywhere.
+  useEffect(() => {
+    if (!openAppId || !loaded) return
+    const found = apps.find((a) => a.id === openAppId)
+    if (found) {
+      setEditing(found)
+      onOpenConsumed?.()
+    }
+  }, [openAppId, loaded, apps, onOpenConsumed])
+
+  // Re-run search whenever filter or apps change.
+  useEffect(() => {
+    if (!filter.trim()) {
+      setSearchResults(null)
+      return
+    }
+    let cancelled = false
+    searchApplications(filter, apps).then((results) => {
+      if (!cancelled) setSearchResults(results)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [filter, apps])
+
   const dismissHint = () => {
     setHintDismissed(true)
     try {
-      localStorage.setItem(DRAG_HINT_KEY, '1')
+      window.localStorage.setItem(DRAG_HINT_KEY, '1')
     } catch {
       // ignore
     }
   }
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 6 } })
-  )
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }))
 
-  useEffect(() => {
-    if (seedNew && apps.loaded) {
-      setSeedData(seedNew)
-      setShowNew(true)
-      onSeedConsumed?.()
-    }
-  }, [seedNew, apps.loaded, onSeedConsumed])
-
-  const grouped = useMemo(() => {
-    const q = filter.trim().toLowerCase()
-    const map: Record<ApplicationStatus, Application[]> = {
-      interested: [], applied: [], screening: [], interviewing: [], offer: [], rejected: [], on_hold: [],
-    }
-    for (const a of apps.items) {
-      if (q) {
-        const hay = `${a.company} ${a.role} ${a.source} ${a.notes}`.toLowerCase()
-        if (!hay.includes(q)) continue
-      }
-      map[a.status]?.push(a)
+  // Match info for badge rendering. Empty when no search.
+  const matchInfo = useMemo(() => {
+    const map = new Map<string, string[]>()
+    if (searchResults) {
+      for (const r of searchResults) map.set(r.app.id, r.matchedFields)
     }
     return map
-  }, [apps.items, filter])
+  }, [searchResults])
+
+  // Visible apps: filtered (only matching) when searching, else all.
+  const visibleApps = useMemo(() => {
+    if (!searchResults) return apps
+    const ids = new Set(searchResults.map((r) => r.app.id))
+    return apps.filter((a) => ids.has(a.id))
+  }, [apps, searchResults])
+
+  const grouped = useMemo(() => {
+    const map: Record<ApplicationStatus, TrackerApplication[]> = {
+      interested: [],
+      applied: [],
+      screening: [],
+      interviewing: [],
+      offer: [],
+      rejected: [],
+      'on-hold': [],
+    }
+    for (const a of visibleApps) map[a.status]?.push(a)
+    return map
+  }, [visibleApps])
+
+  const closedApps = useMemo(
+    () => visibleApps.filter((a) => CLOSED_STATUSES.includes(a.status)),
+    [visibleApps]
+  )
+
+  const upsertLocal = useCallback((next: TrackerApplication) => {
+    setApps((prev) => {
+      const idx = prev.findIndex((a) => a.id === next.id)
+      const out = idx >= 0 ? [...prev.slice(0, idx), next, ...prev.slice(idx + 1)] : [next, ...prev]
+      return out.sort((a, b) => b.updatedAt - a.updatedAt)
+    })
+  }, [])
+
+  const removeLocal = useCallback((id: string) => {
+    setApps((prev) => prev.filter((a) => a.id !== id))
+  }, [])
+
+  const moveStatus = useCallback(
+    async (id: string, toStatus: ApplicationStatus) => {
+      const app = apps.find((a) => a.id === id)
+      if (!app || app.status === toStatus) return
+      const next: TrackerApplication = {
+        ...app,
+        status: toStatus,
+        events: [
+          ...app.events,
+          {
+            id: newEventId(),
+            at: Date.now(),
+            type: 'status_change',
+            fromStatus: app.status,
+            toStatus,
+          },
+        ],
+      }
+      await applicationRepo.save(next)
+      upsertLocal(next)
+    },
+    [apps, upsertLocal]
+  )
 
   const handleDragStart = (e: DragStartEvent) => setActiveId(String(e.active.id))
   const handleDragEnd = (e: DragEndEvent) => {
@@ -106,28 +230,42 @@ export default function ApplicationsBoard({ seedNew, onSeedConsumed }: Props) {
     const id = String(e.active.id)
     const target = e.over?.id ? String(e.over.id) : null
     if (!target) return
-    const validStatuses = APPLICATION_STATUSES.map((s) => s.value)
-    if (!validStatuses.includes(target as ApplicationStatus)) return
-    const app = apps.items.find((a) => a.id === id)
-    if (!app || app.status === target) return
-    apps.update(id, { status: target as ApplicationStatus })
+    const allStatuses: ApplicationStatus[] = [
+      ...ACTIVE_COLUMNS.map((c) => c.id),
+      ...CLOSED_STATUSES,
+    ]
+    if (!allStatuses.includes(target as ApplicationStatus)) return
+    moveStatus(id, target as ApplicationStatus)
   }
 
-  const activeApp = activeId ? apps.items.find((a) => a.id === activeId) ?? null : null
+  const refreshAfterModal = (saved: TrackerApplication | null) => {
+    if (saved) upsertLocal(saved)
+    setEditing(null)
+    setCreating(null)
+  }
 
-  if (!apps.loaded) return <div className="text-neutral-500 text-sm">Loading…</div>
+  const activeApp = activeId ? apps.find((a) => a.id === activeId) ?? null : null
+
+  if (!loaded) return <div className="text-neutral-500 text-sm">Loading…</div>
 
   return (
     <div>
+      <NeedsAttention
+        applications={apps}
+        onLog={setLogTarget}
+        onOpen={setEditing}
+      />
+
       <div className="tracker-toolbar">
         <Input
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          placeholder="Filter by company, role, source…"
+          placeholder="Search company, role, notes, contacts, JD…"
           className="flex-1 min-w-[200px]"
         />
-        <Button onClick={() => { setSeedData(null); setShowNew(true) }}>
-          + New Application
+        <Button onClick={() => setCreating({})}>
+          <Plus className="size-4 mr-1" />
+          New Application
         </Button>
       </div>
 
@@ -145,57 +283,112 @@ export default function ApplicationsBoard({ seedNew, onSeedConsumed }: Props) {
         </div>
       )}
 
-      <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd} onDragCancel={() => setActiveId(null)}>
+      <DndContext
+        sensors={sensors}
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+        onDragCancel={() => setActiveId(null)}
+      >
         <div className="kanban">
-          {APPLICATION_STATUSES.map((s) => (
+          {ACTIVE_COLUMNS.map((col) => (
             <Column
-              key={s.value}
-              status={s.value}
-              label={s.label}
-              hex={s.hex}
-              apps={grouped[s.value]}
-              appointments={appointments}
-              contacts={contacts}
+              key={col.id}
+              status={col.id}
+              label={col.label}
+              hex={col.hex}
+              apps={grouped[col.id]}
+              matchInfo={matchInfo}
               onCardClick={setEditing}
             />
           ))}
+          <ClosedColumn
+            items={closedApps}
+            expanded={closedExpanded}
+            onToggle={() => setClosedExpanded((v) => !v)}
+          />
         </div>
         <DragOverlay>
           {activeApp ? (
-            <Card app={activeApp} appointments={appointments} contacts={contacts} dragging />
+            <Card app={activeApp} matched={matchInfo.get(activeApp.id) ?? []} dragging />
           ) : null}
         </DragOverlay>
       </DndContext>
 
-      {(showNew || editing) && (
-        <ApplicationModal
-          initial={editing ?? { ...blankApp(), ...(seedData ?? {}) }}
-          contacts={contacts}
-          analyses={analyses}
-          linkedAppointments={editing ? appointments.filter((ap) => ap.application_id === editing.id) : []}
-          onClose={() => { setShowNew(false); setEditing(null); setSeedData(null) }}
-          onSave={(data) => {
-            if (editing) apps.update(editing.id, data)
-            else apps.create(data)
-            setShowNew(false); setEditing(null); setSeedData(null)
-          }}
-          onDelete={editing ? () => { apps.remove(editing.id); setEditing(null) } : undefined}
+      {closedExpanded && (
+        <ClosedExpanded
+          items={closedApps}
+          onToggle={() => setClosedExpanded(false)}
+          onReopen={(app) => moveStatus(app.id, 'interested')}
+          onOpen={setEditing}
         />
       )}
+
+      {(creating !== null || editing !== null) && (
+        <ApplicationModal
+          initial={editing ?? buildBlank(creating ?? undefined)}
+          isEdit={editing !== null}
+          contacts={contacts}
+          analyses={analyses}
+          onClose={() => {
+            setEditing(null)
+            setCreating(null)
+          }}
+          onSaved={refreshAfterModal}
+          onDelete={
+            editing
+              ? async () => {
+                  await applicationRepo.delete(editing.id)
+                  removeLocal(editing.id)
+                  setEditing(null)
+                }
+              : undefined
+          }
+        />
+      )}
+
+      <LogActivityModal
+        open={logTarget !== null}
+        app={logTarget}
+        onClose={() => setLogTarget(null)}
+        onLogged={(updated) => {
+          upsertLocal(updated)
+          setLogTarget(null)
+        }}
+      />
     </div>
   )
 }
 
+function buildBlank(seed?: SeedApp): TrackerApplication {
+  const now = Date.now()
+  return {
+    id: newApplicationId(),
+    createdAt: now,
+    updatedAt: now,
+    company: seed?.company ?? '',
+    role: seed?.role ?? '',
+    status: 'interested',
+    source: seed?.source || undefined,
+    linkedContactIds: [],
+    events: [],
+    notes: '',
+  }
+}
+
 function Column({
-  status, label, hex, apps, appointments, contacts, onCardClick,
+  status,
+  label,
+  hex,
+  apps,
+  matchInfo,
+  onCardClick,
 }: {
   status: ApplicationStatus
   label: string
   hex: string
-  apps: Application[]
-  appointments: Appointment[]
-  contacts: Contact[]
-  onCardClick: (a: Application) => void
+  apps: TrackerApplication[]
+  matchInfo: Map<string, string[]>
+  onCardClick: (a: TrackerApplication) => void
 }) {
   const { setNodeRef, isOver } = useDroppable({ id: status })
   return (
@@ -210,7 +403,12 @@ function Column({
       </div>
       <div className="kanban-column-body">
         {apps.map((a) => (
-          <DraggableCard key={a.id} app={a} appointments={appointments} contacts={contacts} onClick={() => onCardClick(a)} />
+          <DraggableCard
+            key={a.id}
+            app={a}
+            matched={matchInfo.get(a.id) ?? []}
+            onClick={() => onCardClick(a)}
+          />
         ))}
         {apps.length === 0 && <div className="kanban-empty">drop here</div>}
       </div>
@@ -219,21 +417,36 @@ function Column({
 }
 
 function DraggableCard({
-  app, appointments, contacts, onClick,
-}: { app: Application; appointments: Appointment[]; contacts: Contact[]; onClick: () => void }) {
+  app,
+  matched,
+  onClick,
+}: {
+  app: TrackerApplication
+  matched: string[]
+  onClick: () => void
+}) {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({ id: app.id })
   return (
     <div ref={setNodeRef} {...attributes} {...listeners} className={isDragging ? 'opacity-30' : ''}>
-      <Card app={app} appointments={appointments} contacts={contacts} onClick={onClick} />
+      <Card app={app} matched={matched} onClick={onClick} />
     </div>
   )
 }
 
 function Card({
-  app, appointments, contacts, onClick, dragging,
-}: { app: Application; appointments: Appointment[]; contacts: Contact[]; onClick?: () => void; dragging?: boolean }) {
-  const linkedAppt = appointments.filter((ap) => ap.application_id === app.id).length
-  const linkedContacts = app.contact_ids.length
+  app,
+  matched,
+  onClick,
+  dragging,
+}: {
+  app: TrackerApplication
+  matched: string[]
+  onClick?: () => void
+  dragging?: boolean
+}) {
+  const linkedContactCount = app.linkedContactIds.length
+  const lastAt = getLastActivityAt(app)
+  const stale = getStaleness(app)
   return (
     <div
       onClick={onClick}
@@ -243,114 +456,202 @@ function Card({
     >
       <div className="kanban-card-company truncate">{app.company || '—'}</div>
       <div className="kanban-card-role truncate">{app.role || '—'}</div>
-      {app.applied_date && (
-        <div className="kanban-card-meta inline-flex items-center gap-1">
-          <Calendar className="size-3" /> {app.applied_date}
+      {app.source && <div className="kanban-card-meta truncate">via {app.source}</div>}
+
+      {(linkedContactCount > 0 || app.linkedAnalysisId) && (
+        <div className="flex flex-wrap gap-2 mt-2 text-[11px] text-[var(--text-tertiary)]">
+          {linkedContactCount > 0 && (
+            <span className="inline-flex items-center gap-1">
+              <Users className="size-3" /> {linkedContactCount}
+            </span>
+          )}
+          {app.linkedAnalysisId && (
+            <a
+              href={`/analyze?id=${app.linkedAnalysisId}`}
+              onClick={(e) => e.stopPropagation()}
+              className="inline-flex items-center gap-1 text-[var(--accent-blue)] hover:underline"
+            >
+              <FileText className="size-3" />
+              Resume
+            </a>
+          )}
         </div>
       )}
-      {app.source && <div className="kanban-card-meta truncate">via {app.source}</div>}
-      {(linkedContacts > 0 || linkedAppt > 0 || app.analysis_id) && (
-        <div className="flex flex-wrap gap-2 mt-2 text-[11px] text-[var(--text-tertiary)]">
-          {linkedContacts > 0 && (
-            <span className="inline-flex items-center gap-1">
-              <Users className="size-3" /> {linkedContacts}
+
+      <div className="flex items-center justify-between gap-2 mt-2">
+        <span className="text-[11px] text-[var(--text-tertiary)] tabular-nums inline-flex items-center gap-1">
+          <Calendar className="size-3" />
+          {formatRelativeDate(lastAt)}
+        </span>
+        {stale.level !== 'fresh' && (
+          <span
+            className={`inline-flex items-center gap-0.5 text-[11px] font-medium px-1.5 py-px rounded-[var(--radius-sm)] tabular-nums border ${
+              stale.level === 'warning'
+                ? 'bg-amber-500/10 text-amber-300 border-amber-500/30'
+                : 'bg-red-500/10 text-red-300 border-red-500/30'
+            }`}
+          >
+            {stale.level === 'warning' ? '⚠' : '🔔'} {stale.daysSinceActivity}d
+          </span>
+        )}
+      </div>
+
+      {matched.length > 0 && (
+        <div className="flex flex-wrap gap-1 mt-2">
+          {matched.map((f) => (
+            <span
+              key={f}
+              className="text-[10px] px-1.5 py-px rounded-[var(--radius-sm)] bg-amber-500/15 text-amber-300"
+            >
+              {f}
             </span>
-          )}
-          {linkedAppt > 0 && (
-            <span className="inline-flex items-center gap-1">
-              <Calendar className="size-3" /> {linkedAppt}
-            </span>
-          )}
-          {app.analysis_id && (
-            <span title="Linked analysis" className="inline-flex">
-              <FileText className="size-3" />
-            </span>
-          )}
+          ))}
         </div>
       )}
     </div>
   )
 }
 
+// =========================
+// Application Create/Edit Modal
+// =========================
 function ApplicationModal({
-  initial, contacts, analyses, linkedAppointments, onClose, onSave, onDelete,
+  initial,
+  isEdit,
+  contacts,
+  analyses,
+  onClose,
+  onSaved,
+  onDelete,
 }: {
-  initial: Partial<Application>
-  contacts: Contact[]
+  initial: TrackerApplication
+  isEdit: boolean
+  contacts: TrackerContact[]
   analyses: Analysis[]
-  linkedAppointments: Appointment[]
   onClose: () => void
-  onSave: (data: Omit<Application, 'id' | 'created_at' | 'updated_at'>) => void
+  onSaved: (saved: TrackerApplication) => void
   onDelete?: () => void
 }) {
   const [form, setForm] = useState({
-    company: initial.company ?? '',
-    role: initial.role ?? '',
-    status: (initial.status ?? 'interested') as ApplicationStatus,
-    applied_date: initial.applied_date ?? '',
-    jd_url: initial.jd_url ?? '',
+    company: initial.company,
+    role: initial.role,
+    status: initial.status,
     source: initial.source ?? '',
-    salary_target: initial.salary_target ?? '',
-    analysis_id: initial.analysis_id ?? '',
-    contact_ids: initial.contact_ids ?? [],
-    notes: initial.notes ?? '',
+    linkedAnalysisId: initial.linkedAnalysisId ?? '',
+    linkedContactIds: initial.linkedContactIds,
+    notes: initial.notes,
   })
 
   const toggleContact = (id: string) => {
     setForm((f) => ({
       ...f,
-      contact_ids: f.contact_ids.includes(id) ? f.contact_ids.filter((c) => c !== id) : [...f.contact_ids, id],
+      linkedContactIds: f.linkedContactIds.includes(id)
+        ? f.linkedContactIds.filter((c) => c !== id)
+        : [...f.linkedContactIds, id],
     }))
   }
 
+  const handleSave = async () => {
+    if (!form.company.trim() || !form.role.trim()) return
+    const events = [...initial.events]
+    if (form.status !== initial.status) {
+      events.push({
+        id: newEventId(),
+        at: Date.now(),
+        type: 'status_change',
+        fromStatus: initial.status,
+        toStatus: form.status,
+      })
+    }
+    const next: TrackerApplication = {
+      ...initial,
+      company: form.company.trim(),
+      role: form.role.trim(),
+      status: form.status,
+      source: form.source.trim() || undefined,
+      linkedAnalysisId: form.linkedAnalysisId || undefined,
+      linkedContactIds: form.linkedContactIds,
+      notes: form.notes,
+      events,
+    }
+    await applicationRepo.save(next)
+    onSaved(next)
+  }
+
   return (
-    <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" onClick={onClose}>
-      <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-        <h3 className="text-xl font-bold mb-4">{onDelete ? 'Edit Application' : 'New Application'}</h3>
+    <Dialog open onOpenChange={(o) => { if (!o) onClose() }}>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>{isEdit ? 'Edit application' : 'New application'}</DialogTitle>
+        </DialogHeader>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <Field label="Company *" value={form.company} onChange={(v) => setForm({ ...form, company: v })} />
-          <Field label="Role *" value={form.role} onChange={(v) => setForm({ ...form, role: v })} />
-          <L label="Status">
-            <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value as ApplicationStatus })} className={inputCls}>
-              {APPLICATION_STATUSES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
-            </select>
-          </L>
-          <Field label="Applied date" type="date" value={form.applied_date ?? ''} onChange={(v) => setForm({ ...form, applied_date: v || null })} />
-          <Field label="Source" value={form.source} onChange={(v) => setForm({ ...form, source: v })} placeholder="Jacobson, LinkedIn, Direct…" />
-          <Field label="Salary target" value={form.salary_target} onChange={(v) => setForm({ ...form, salary_target: v })} placeholder="$260K base" />
-          <div className="md:col-span-2">
-            <Field label="JD URL" value={form.jd_url} onChange={(v) => setForm({ ...form, jd_url: v })} placeholder="https://…" />
-          </div>
+          <Field label="Company *">
+            <Input value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} />
+          </Field>
+          <Field label="Role *">
+            <Input value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })} />
+          </Field>
+          <Field label="Status">
+            <Select
+              value={form.status}
+              onValueChange={(v) => setForm({ ...form, status: v as ApplicationStatus })}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {[...ACTIVE_COLUMNS, ...CLOSED_STATUSES.map((id) => ({ id, label: trackerStatusLabel(id), hex: '' }))].map(
+                  (opt) => (
+                    <SelectItem key={opt.id} value={opt.id}>
+                      {opt.label}
+                    </SelectItem>
+                  )
+                )}
+              </SelectContent>
+            </Select>
+          </Field>
+          <Field label="Source">
+            <Input
+              value={form.source}
+              onChange={(e) => setForm({ ...form, source: e.target.value })}
+              placeholder="LinkedIn, Referral, Recruiter…"
+            />
+          </Field>
 
-          {/* Analysis link */}
           <div className="md:col-span-2">
-            <L label="Linked Analysis">
-              <select
-                value={form.analysis_id}
-                onChange={(e) => setForm({ ...form, analysis_id: e.target.value })}
-                className={inputCls}
+            <Field label="Linked analysis">
+              <Select
+                value={form.linkedAnalysisId || 'none'}
+                onValueChange={(v) => setForm({ ...form, linkedAnalysisId: v === 'none' ? '' : v })}
               >
-                <option value="">— None —</option>
-                {analyses.map((a) => (
-                  <option key={a.id} value={a.id}>
-                    {a.job_title} @ {a.company} ({a.date?.slice(0, 10)})
-                  </option>
-                ))}
-              </select>
-            </L>
+                <SelectTrigger>
+                  <SelectValue placeholder="None" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">— None —</SelectItem>
+                  {analyses.map((a) => (
+                    <SelectItem key={a.id} value={a.id}>
+                      {a.extracted.role || '(untitled)'} · {a.extracted.company || 'unknown'}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </Field>
           </div>
 
-          {/* Contacts */}
           <div className="md:col-span-2">
-            <label className="block text-xs font-medium text-neutral-400 mb-1">
-              Linked Contacts ({form.contact_ids.length})
+            <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
+              Linked contacts ({form.linkedContactIds.length})
             </label>
             {contacts.length === 0 ? (
-              <p className="text-xs text-neutral-500 italic">Add contacts in the Contacts tab to link them here.</p>
+              <p className="text-xs text-[var(--text-tertiary)] italic">
+                Add contacts in the Contacts tab to link them here.
+              </p>
             ) : (
-              <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto p-2 bg-neutral-950 border border-neutral-700 rounded-lg">
+              <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto p-2 bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded-[var(--radius-md)]">
                 {contacts.map((c) => {
-                  const on = form.contact_ids.includes(c.id)
+                  const on = form.linkedContactIds.includes(c.id)
                   return (
                     <button
                       key={c.id}
@@ -359,10 +660,11 @@ function ApplicationModal({
                       className={`text-xs px-2 py-1 rounded-md transition-colors ${
                         on
                           ? 'bg-blue-600 text-white'
-                          : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700'
+                          : 'bg-[var(--bg-elevated-2)] text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]'
                       }`}
                     >
-                      {c.name}{c.company ? ` · ${c.company}` : ''}
+                      {c.name}
+                      {c.company ? ` · ${c.company}` : ''}
                     </button>
                   )
                 })}
@@ -371,84 +673,42 @@ function ApplicationModal({
           </div>
 
           <div className="md:col-span-2">
-            <label className="block text-xs font-medium text-neutral-400 mb-1">Notes</label>
-            <textarea
-              value={form.notes}
-              onChange={(e) => setForm({ ...form, notes: e.target.value })}
-              rows={4}
-              className={inputCls}
-            />
+            <Field label="Notes">
+              <Textarea
+                rows={4}
+                value={form.notes}
+                onChange={(e) => setForm({ ...form, notes: e.target.value })}
+              />
+            </Field>
           </div>
-
-          {linkedAppointments.length > 0 && (
-            <div className="md:col-span-2 mt-2">
-              <label className="block text-xs font-medium text-neutral-400 mb-2">Linked Appointments</label>
-              <div className="space-y-1">
-                {linkedAppointments.map((ap) => (
-                  <div key={ap.id} className="text-xs bg-neutral-800/60 border border-neutral-700/50 rounded-md px-3 py-1.5">
-                    <span className="text-neutral-200">{ap.title}</span>
-                    <span className="text-neutral-500"> · {new Date(ap.starts_at).toLocaleString()}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
-        <div className="flex justify-between items-center mt-5">
-          <div>
-            {onDelete && (
-              <button onClick={() => { if (confirm('Delete this application?')) onDelete() }} className="px-3 py-2 text-red-400 hover:text-red-300 text-sm">
-                Delete
-              </button>
-            )}
-          </div>
-          <div className="flex gap-2">
-            <button onClick={onClose} className="px-4 py-2 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 text-sm rounded-lg transition-colors">
-              Cancel
-            </button>
-            <button
+
+        <DialogFooter>
+          {onDelete && (
+            <Button
+              variant="ghost"
+              className="mr-auto text-red-400 hover:text-red-300"
               onClick={() => {
-                if (!form.company.trim() || !form.role.trim()) return
-                onSave({
-                  company: form.company,
-                  role: form.role,
-                  status: form.status,
-                  applied_date: form.applied_date || null,
-                  jd_url: form.jd_url,
-                  source: form.source,
-                  salary_target: form.salary_target,
-                  analysis_id: form.analysis_id || undefined,
-                  contact_ids: form.contact_ids,
-                  notes: form.notes,
-                })
+                if (confirm('Delete this application?')) onDelete()
               }}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
             >
-              Save
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+              Delete
+            </Button>
+          )}
+          <Button variant="ghost" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button onClick={handleSave}>Save</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
 
-const inputCls = 'w-full px-3 py-2 bg-neutral-950 border border-neutral-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50'
-
-function Field({
-  label, value, onChange, type = 'text', placeholder,
-}: { label: string; value: string; onChange: (v: string) => void; type?: string; placeholder?: string }) {
-  return (
-    <L label={label}>
-      <input type={type} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} className={inputCls} />
-    </L>
-  )
-}
-
-function L({ label, children }: { label: string; children: React.ReactNode }) {
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <label className="block text-xs font-medium text-neutral-400 mb-1">{label}</label>
+      <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">{label}</label>
       {children}
     </div>
   )

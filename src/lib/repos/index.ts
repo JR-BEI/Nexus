@@ -1,0 +1,8 @@
+export { analysisRepo } from './analysisRepo'
+export { repositoryRepo } from './repositoryRepo'
+export { applicationRepo } from './applicationRepo'
+export { contactRepo } from './contactRepo'
+export { appointmentRepo } from './appointmentRepo'
+export { companyRepo } from './companyRepo'
+export { strategyRepo } from './strategyRepo'
+export { settingsRepo } from './settingsRepo'

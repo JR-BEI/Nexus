@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     )
 
     // Extract transcript
-    const transcript = result.results?.channels[0]?.alternatives[0]?.transcript
+    const transcript = result?.results?.channels[0]?.alternatives[0]?.transcript
 
     if (!transcript) {
       return NextResponse.json(
