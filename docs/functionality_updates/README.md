@@ -4,11 +4,13 @@ This series tracked the work to make Nexus *behave* like a connected product (ra
 
 ```
 functionality_updates/
-├── archived/   ← shipped, see commit history for the implementation
-└── backlog/    ← planned but not yet started
+├── archived/
+│   ├── functional/   ← behavior/connective-tissue docs (00-11), shipped
+│   └── style/        ← original visual-design docs, shipped earlier
+└── backlog/          ← planned but not yet started
 ```
 
-## Archived (shipped)
+## Archived — functional (shipped)
 
 | # | Doc | Status |
 |---|-----|--------|
