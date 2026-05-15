@@ -8,10 +8,25 @@ import ResumeOutput from '@/components/ResumeOutput'
 import CoverLetterOutput from '@/components/CoverLetterOutput'
 import StrategyBrief from '@/components/StrategyBrief'
 import Spinner from '@/components/Spinner'
+import { PageShell } from '@/components/ui/PageShell'
+import { StepIndicator } from '@/components/StepIndicator'
+import { Button } from '@/components/ui/button'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import type { JDAnalysis, MatchedBlock, Analysis } from '@/types'
 
 type Step = 'input' | 'analysis' | 'outputs'
 type OutputTab = 'resume' | 'cover' | 'strategy'
+
+const STEP_NUM: Record<Step, 1 | 2 | 3> = {
+  input: 1,
+  analysis: 2,
+  outputs: 3,
+}
+const STEP_LABEL: Record<Step, string> = {
+  input: 'Input',
+  analysis: 'Analysis',
+  outputs: 'Outputs',
+}
 
 export default function AnalyzePage() {
   const router = useRouter()
@@ -41,7 +56,6 @@ export default function AnalyzePage() {
           const analysis = analyses.find((a) => a.id === analysisId)
 
           if (analysis) {
-            // Populate all state from saved analysis
             setJobDescription(analysis.jd_text)
             setJdAnalysis(analysis.jd_analysis)
             setMatchedBlocks(analysis.matched_blocks)
@@ -50,8 +64,6 @@ export default function AnalyzePage() {
             setCoverLetter(analysis.cover_letter || '')
             setStrategyBrief(analysis.strategy_brief || '')
             setViewingAnalysisId(analysisId)
-
-            // Skip to outputs step
             setStep('outputs')
           }
         } catch (error) {
@@ -66,34 +78,26 @@ export default function AnalyzePage() {
     setJobDescription(jd)
 
     try {
-      // Step 1: Analyze JD
       const analyzeResponse = await fetch('/api/analyze-jd', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ jobDescription: jd })
+        body: JSON.stringify({ jobDescription: jd }),
       })
-
       if (!analyzeResponse.ok) throw new Error('Failed to analyze JD')
 
       const analysis: JDAnalysis = await analyzeResponse.json()
-      console.log('JD Analysis received:', analysis)
       setJdAnalysis(analysis)
 
-      // Step 2: Match repository
       const matchResponse = await fetch('/api/match', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ jdAnalysis: analysis })
+        body: JSON.stringify({ jdAnalysis: analysis }),
       })
-
       if (!matchResponse.ok) throw new Error('Failed to match repository')
 
       const matchData = await matchResponse.json()
-      console.log('Match data received:', matchData)
       setMatchedBlocks(matchData.matched_blocks)
       setMatchSummary(matchData.summary)
-
-      console.log('Setting step to analysis')
       setStep('analysis')
     } catch (error) {
       console.error('Error:', error)
@@ -105,11 +109,9 @@ export default function AnalyzePage() {
 
   const handleGenerateOutputs = async () => {
     if (!jdAnalysis || matchedBlocks.length === 0) return
-
     setLoading(true)
 
     try {
-      // Generate all three outputs in parallel
       const [resumeRes, coverRes, strategyRes] = await Promise.all([
         fetch('/api/generate', {
           method: 'POST',
@@ -117,8 +119,8 @@ export default function AnalyzePage() {
           body: JSON.stringify({
             type: 'resume',
             jd_analysis: jdAnalysis,
-            matched_blocks: matchedBlocks
-          })
+            matched_blocks: matchedBlocks,
+          }),
         }),
         fetch('/api/generate', {
           method: 'POST',
@@ -126,8 +128,8 @@ export default function AnalyzePage() {
           body: JSON.stringify({
             type: 'cover_letter',
             jd_analysis: jdAnalysis,
-            matched_blocks: matchedBlocks
-          })
+            matched_blocks: matchedBlocks,
+          }),
         }),
         fetch('/api/generate', {
           method: 'POST',
@@ -135,9 +137,9 @@ export default function AnalyzePage() {
           body: JSON.stringify({
             type: 'strategy_brief',
             jd_analysis: jdAnalysis,
-            matched_blocks: matchedBlocks
-          })
-        })
+            matched_blocks: matchedBlocks,
+          }),
+        }),
       ])
 
       if (!resumeRes.ok || !coverRes.ok || !strategyRes.ok) {
@@ -147,15 +149,14 @@ export default function AnalyzePage() {
       const [resumeData, coverData, strategyData] = await Promise.all([
         resumeRes.json(),
         coverRes.json(),
-        strategyRes.json()
+        strategyRes.json(),
       ])
 
       setResume(resumeData.content)
       setCoverLetter(coverData.content)
       setStrategyBrief(strategyData.content)
 
-      // Save to localStorage
-      const analysis: Analysis = {
+      const newAnalysis: Analysis = {
         id: Date.now().toString(),
         job_title: jdAnalysis.role_title,
         company: jdAnalysis.company || 'Unknown',
@@ -165,12 +166,12 @@ export default function AnalyzePage() {
         matched_blocks: matchedBlocks,
         resume: resumeData.content,
         cover_letter: coverData.content,
-        strategy_brief: strategyData.content
+        strategy_brief: strategyData.content,
       }
 
       const saved = localStorage.getItem('analyses')
       const analyses = saved ? JSON.parse(saved) : []
-      analyses.unshift(analysis)
+      analyses.unshift(newAnalysis)
       localStorage.setItem('analyses', JSON.stringify(analyses))
 
       setStep('outputs')
@@ -182,270 +183,146 @@ export default function AnalyzePage() {
     }
   }
 
-  // Helper to determine step completion
-  const isStepComplete = (stepName: Step) => {
-    if (stepName === 'input') return step !== 'input'
-    if (stepName === 'analysis') return step === 'outputs'
-    return false
-  }
+  const currentStep = STEP_NUM[step]
+  const status =
+    step === 'outputs' && jdAnalysis
+      ? `Tailored for ${jdAnalysis.role_title}${jdAnalysis.company ? ` · ${jdAnalysis.company}` : ''}`
+      : `Step ${currentStep} of 3 · ${STEP_LABEL[step]}`
 
   return (
-    <div className="min-h-screen bg-neutral-900 text-neutral-100 p-8">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-neutral-100 mb-2 flex items-center gap-2">
-              <span className="text-2xl">⚡</span>
-              Nexus
-            </h1>
-            <p className="text-neutral-400">
-              AI-powered resume tailoring for your next role
-            </p>
-          </div>
-          <button
-            onClick={() => router.push('/')}
-            className="px-4 py-2 text-neutral-400 hover:text-neutral-200 transition-colors rounded-lg hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-          >
-            ← Back to Home
-          </button>
-        </div>
+    <PageShell
+      titlePrefix="New"
+      titleAccent="Analysis"
+      subtitle="Paste a job description. Get a tailored resume, cover letter, and interview brief."
+      status={status}
+      backHref="/"
+      backLabel="Back to Home"
+    >
+      <StepIndicator currentStep={currentStep} />
 
-        {/* Progress Indicator */}
-        <div className="mb-10 flex items-center justify-center space-x-3">
-          {/* Step 1: Input */}
-          <div
-            className={`flex items-center ${
-              step === 'input' ? 'text-blue-400' : isStepComplete('input') ? 'text-green-400' : 'text-neutral-500'
-            }`}
-          >
-            <div
-              className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all ${
-                step === 'input'
-                  ? 'border-blue-500 bg-blue-500/20 scale-105'
-                  : isStepComplete('input')
-                  ? 'border-green-500 bg-green-500/20'
-                  : 'border-neutral-600'
-              }`}
-            >
-              {isStepComplete('input') ? (
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-              ) : (
-                <span className={step === 'input' ? 'font-bold' : ''}>1</span>
-              )}
-            </div>
-            <span className={`ml-2 text-sm ${step === 'input' ? 'font-bold' : 'font-medium'}`}>Input</span>
-          </div>
-
-          {/* Connector */}
-          <div className={`w-12 h-0.5 transition-colors ${isStepComplete('input') ? 'bg-green-500' : 'bg-neutral-700'}`}></div>
-
-          {/* Step 2: Analysis */}
-          <div
-            className={`flex items-center ${
-              step === 'analysis' ? 'text-blue-400' : isStepComplete('analysis') ? 'text-green-400' : 'text-neutral-500'
-            }`}
-          >
-            <div
-              className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all ${
-                step === 'analysis'
-                  ? 'border-blue-500 bg-blue-500/20 scale-105'
-                  : isStepComplete('analysis')
-                  ? 'border-green-500 bg-green-500/20'
-                  : 'border-neutral-600'
-              }`}
-            >
-              {isStepComplete('analysis') ? (
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-              ) : (
-                <span className={step === 'analysis' ? 'font-bold' : ''}>2</span>
-              )}
-            </div>
-            <span className={`ml-2 text-sm ${step === 'analysis' ? 'font-bold' : 'font-medium'}`}>Analysis</span>
-          </div>
-
-          {/* Connector */}
-          <div className={`w-12 h-0.5 transition-colors ${isStepComplete('analysis') ? 'bg-green-500' : 'bg-neutral-700'}`}></div>
-
-          {/* Step 3: Outputs */}
-          <div
-            className={`flex items-center ${
-              step === 'outputs' ? 'text-blue-400' : 'text-neutral-500'
-            }`}
-          >
-            <div
-              className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all ${
-                step === 'outputs'
-                  ? 'border-blue-500 bg-blue-500/20 scale-105'
-                  : 'border-neutral-600'
-              }`}
-            >
-              <span className={step === 'outputs' ? 'font-bold' : ''}>3</span>
-            </div>
-            <span className={`ml-2 text-sm ${step === 'outputs' ? 'font-bold' : 'font-medium'}`}>Outputs</span>
-          </div>
-        </div>
-
-        {/* Step Content */}
-        {step === 'input' && (
-          <>
-            {loading ? (
-              <div className="w-full p-8 bg-neutral-800/50 rounded-xl border border-neutral-700/50">
-                <div className="flex flex-col items-center justify-center py-16 space-y-6">
-                  <Spinner size="lg" />
-                  <div className="text-center space-y-2">
-                    <div className="text-neutral-100 font-semibold text-lg">Analyzing Job Description</div>
-                    <div className="text-neutral-400 text-sm">Extracting requirements and matching your experience...</div>
-                  </div>
-                  <div className="flex gap-2 items-center">
-                    <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
-                    <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse delay-100"></div>
-                    <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse delay-200"></div>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <JDInput onAnalyze={handleAnalyzeJD} loading={loading} />
-            )}
-          </>
-        )}
-
-        {step === 'analysis' && jdAnalysis && (
-          <div className="space-y-6">
-            <AnalysisResults
-              jdAnalysis={jdAnalysis}
-              matchedBlocks={matchedBlocks}
-              summary={matchSummary}
-              loading={false}
+      {step === 'input' && (
+        <section className="page-content-section">
+          {loading ? (
+            <LoadingCard
+              title="Analyzing Job Description"
+              body="Extracting requirements and matching your experience..."
             />
-            <div className="flex justify-center pt-2">
-              <button
-                onClick={handleGenerateOutputs}
-                disabled={loading}
-                className="px-10 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 disabled:bg-neutral-700 disabled:text-neutral-500 disabled:cursor-not-allowed transition-all hover:shadow-lg hover:shadow-blue-500/20 flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-              >
-                {loading ? (
-                  <>
-                    <Spinner size="sm" />
-                    <span>Generating Outputs...</span>
-                  </>
-                ) : (
-                  'Generate Resume & Outputs'
-                )}
-              </button>
-            </div>
+          ) : (
+            <JDInput onAnalyze={handleAnalyzeJD} loading={loading} />
+          )}
+        </section>
+      )}
+
+      {step === 'analysis' && jdAnalysis && (
+        <section className="page-content-section space-y-6">
+          <AnalysisResults
+            jdAnalysis={jdAnalysis}
+            matchedBlocks={matchedBlocks}
+            summary={matchSummary}
+            loading={false}
+          />
+          <div className="flex justify-center pt-2">
+            <Button
+              onClick={handleGenerateOutputs}
+              disabled={loading}
+              size="lg"
+              className="text-base font-medium"
+            >
+              {loading ? (
+                <>
+                  <Spinner size="sm" />
+                  <span>Generating Outputs...</span>
+                </>
+              ) : (
+                'Generate Resume & Outputs'
+              )}
+            </Button>
           </div>
-        )}
+        </section>
+      )}
 
-        {step === 'outputs' && (
-          <>
-            {loading ? (
-              <div className="w-full p-8 bg-neutral-800/50 rounded-xl border border-neutral-700/50">
-                <div className="flex flex-col items-center justify-center py-16 space-y-6">
-                  <Spinner size="lg" />
-                  <div className="text-center space-y-2">
-                    <div className="text-neutral-100 font-semibold text-lg">Generating Your Outputs</div>
-                    <div className="text-neutral-400 text-sm">Creating resume, cover letter, and strategy brief...</div>
-                  </div>
-                  <div className="flex gap-2 items-center">
-                    <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
-                    <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse delay-100"></div>
-                    <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse delay-200"></div>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-6">
-                {/* Tabs */}
-                <div className="border-b border-neutral-700/50">
-                  <div className="flex space-x-1">
-                    <button
-                      onClick={() => setActiveTab('resume')}
-                      className={`pb-3 px-4 text-base font-medium border-b-2 transition-all ${
-                        activeTab === 'resume'
-                          ? 'border-blue-500 text-blue-400'
-                          : 'border-transparent text-neutral-400 hover:text-neutral-200 hover:border-neutral-600'
-                      }`}
-                    >
-                      Resume
-                    </button>
-                    <button
-                      onClick={() => setActiveTab('cover')}
-                      className={`pb-3 px-4 text-base font-medium border-b-2 transition-all ${
-                        activeTab === 'cover'
-                          ? 'border-blue-500 text-blue-400'
-                          : 'border-transparent text-neutral-400 hover:text-neutral-200 hover:border-neutral-600'
-                      }`}
-                    >
-                      Cover Letter
-                    </button>
-                    <button
-                      onClick={() => setActiveTab('strategy')}
-                      className={`pb-3 px-4 text-base font-medium border-b-2 transition-all ${
-                        activeTab === 'strategy'
-                          ? 'border-blue-500 text-blue-400'
-                          : 'border-transparent text-neutral-400 hover:text-neutral-200 hover:border-neutral-600'
-                      }`}
-                    >
-                      Strategy Brief
-                    </button>
-                  </div>
-                </div>
-
-                {/* Tab Content */}
-                {activeTab === 'resume' && (
+      {step === 'outputs' && (
+        <section className="page-content-section">
+          {loading ? (
+            <LoadingCard
+              title="Generating Your Outputs"
+              body="Creating resume, cover letter, and strategy brief..."
+            />
+          ) : (
+            <div className="space-y-6">
+              <Tabs
+                value={activeTab}
+                onValueChange={(v) => setActiveTab(v as OutputTab)}
+              >
+                <TabsList className="w-full justify-start">
+                  <TabsTrigger value="resume">Resume</TabsTrigger>
+                  <TabsTrigger value="cover">Cover Letter</TabsTrigger>
+                  <TabsTrigger value="strategy">Strategy Brief</TabsTrigger>
+                </TabsList>
+                <TabsContent value="resume" className="mt-6">
                   <ResumeOutput
                     content={resume}
                     companyName={jdAnalysis?.company}
                     jobTitle={jdAnalysis?.role_title}
                     matchedBlocks={matchedBlocks}
                   />
-                )}
-                {activeTab === 'cover' && (
+                </TabsContent>
+                <TabsContent value="cover" className="mt-6">
                   <CoverLetterOutput
                     content={coverLetter}
                     companyName={jdAnalysis?.company}
                   />
-                )}
-                {activeTab === 'strategy' && (
+                </TabsContent>
+                <TabsContent value="strategy" className="mt-6">
                   <StrategyBrief content={strategyBrief} />
-                )}
+                </TabsContent>
+              </Tabs>
 
-                {/* Action Buttons */}
-                <div className="flex justify-center gap-3 pt-6 border-t border-neutral-700/50 mt-8">
-                  {viewingAnalysisId && (
-                    <button
-                      onClick={() => {
-                        // Re-analyze with the same job description
-                        setViewingAnalysisId(null)
-                        setStep('input')
-                        router.push('/analyze')
-                        // Trigger analysis automatically
-                        setTimeout(() => handleAnalyzeJD(jobDescription), 100)
-                      }}
-                      className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all font-medium hover:shadow-lg hover:shadow-blue-500/20 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-                    >
-                      Re-analyze
-                    </button>
-                  )}
-                  <button
+              <div className="outputs-footer pt-6 border-t border-[var(--border-subtle)]">
+                {viewingAnalysisId && (
+                  <Button
                     onClick={() => {
                       setViewingAnalysisId(null)
+                      setStep('input')
                       router.push('/analyze')
+                      setTimeout(() => handleAnalyzeJD(jobDescription), 100)
                     }}
-                    className="px-6 py-3 bg-neutral-700 hover:bg-neutral-600 text-neutral-100 rounded-xl transition-all font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                   >
-                    Start New Analysis
-                  </button>
-                </div>
+                    Re-analyze
+                  </Button>
+                )}
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    setViewingAnalysisId(null)
+                    router.push('/analyze')
+                  }}
+                >
+                  Start New Analysis
+                </Button>
               </div>
-            )}
-          </>
-        )}
+            </div>
+          )}
+        </section>
+      )}
+    </PageShell>
+  )
+}
+
+function LoadingCard({ title, body }: { title: string; body: string }) {
+  return (
+    <div className="w-full p-8 rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-[var(--bg-elevated)]">
+      <div className="flex flex-col items-center justify-center py-16 space-y-6">
+        <Spinner size="lg" />
+        <div className="text-center space-y-2">
+          <div className="text-[var(--text-primary)] font-semibold text-lg">{title}</div>
+          <div className="text-[var(--text-secondary)] text-sm">{body}</div>
+        </div>
+        <div className="flex gap-2 items-center">
+          <div className="w-2 h-2 rounded-full bg-[var(--accent-blue)] animate-pulse" />
+          <div className="w-2 h-2 rounded-full bg-[var(--accent-blue)] animate-pulse delay-100" />
+          <div className="w-2 h-2 rounded-full bg-[var(--accent-blue)] animate-pulse delay-200" />
+        </div>
       </div>
     </div>
   )

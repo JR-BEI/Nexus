@@ -1,6 +1,11 @@
 'use client'
 
 import { useState } from 'react'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import { toast } from 'sonner'
+import { Check } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 interface StrategyBriefProps {
   content: string
@@ -12,26 +17,26 @@ export default function StrategyBrief({ content }: StrategyBriefProps) {
   const handleCopy = async () => {
     await navigator.clipboard.writeText(content)
     setCopied(true)
+    toast.success('Strategy brief copied to clipboard')
     setTimeout(() => setCopied(false), 2000)
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex justify-end items-center gap-2 pb-2">
-        <button
-          onClick={handleCopy}
-          className="px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-100 text-sm rounded-lg transition-all font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-        >
-          {copied ? '✓ Copied!' : 'Copy to Clipboard'}
-        </button>
+    <article className="document-card">
+      <div className="document-actions">
+        <Button variant="secondary" size="sm" onClick={handleCopy}>
+          {copied ? (
+            <>
+              <Check className="size-3.5" /> Copied
+            </>
+          ) : (
+            'Copy to Clipboard'
+          )}
+        </Button>
       </div>
-      <div className="p-8 bg-neutral-800/50 rounded-xl border border-neutral-700/50">
-        <div className="prose prose-invert prose-sm max-w-none">
-          <pre className="whitespace-pre-wrap font-sans text-neutral-100 leading-relaxed text-[15px]">
-            {content}
-          </pre>
-        </div>
+      <div className="document-content">
+        <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
       </div>
-    </div>
+    </article>
   )
 }

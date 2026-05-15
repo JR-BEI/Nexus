@@ -1,64 +1,103 @@
 'use client'
 
-import { useState, useRef } from 'react'
-import Spinner from './Spinner'
+import { useEffect, useRef, useState } from 'react'
+
+type RecordingState = 'idle' | 'listening' | 'processing' | 'complete'
 
 interface VoiceRecorderProps {
   onTranscript: (text: string) => void
   loading?: boolean
 }
 
+function MicIcon() {
+  return (
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+      <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+      <line x1="12" y1="19" x2="12" y2="23" />
+      <line x1="8" y1="23" x2="16" y2="23" />
+    </svg>
+  )
+}
+
+function formatTime(ms: number) {
+  const total = Math.floor(ms / 1000)
+  const m = Math.floor(total / 60)
+    .toString()
+    .padStart(2, '0')
+  const s = (total % 60).toString().padStart(2, '0')
+  return `${m}:${s}`
+}
+
 export default function VoiceRecorder({ onTranscript, loading = false }: VoiceRecorderProps) {
-  const [isRecording, setIsRecording] = useState(false)
+  const [state, setState] = useState<RecordingState>('idle')
+  const [elapsed, setElapsed] = useState(0)
   const [error, setError] = useState<string | null>(null)
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const chunksRef = useRef<Blob[]>([])
+  const timerRef = useRef<number | null>(null)
+  const startTimeRef = useRef<number>(0)
+
+  // External loading prop overrides internal state to show processing
+  const effectiveState: RecordingState = loading ? 'processing' : state
+
+  useEffect(() => {
+    if (state === 'listening') {
+      startTimeRef.current = Date.now()
+      setElapsed(0)
+      timerRef.current = window.setInterval(() => {
+        setElapsed(Date.now() - startTimeRef.current)
+      }, 250)
+    } else if (timerRef.current) {
+      window.clearInterval(timerRef.current)
+      timerRef.current = null
+    }
+    return () => {
+      if (timerRef.current) window.clearInterval(timerRef.current)
+    }
+  }, [state])
 
   const startRecording = async () => {
     try {
       setError(null)
-
-      // Request microphone access
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      const mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' })
 
-      // Create MediaRecorder
-      const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: 'audio/webm'
-      })
-
-      // Store chunks as they arrive
       mediaRecorder.ondataavailable = (e) => {
-        if (e.data.size > 0) {
-          chunksRef.current.push(e.data)
-        }
+        if (e.data.size > 0) chunksRef.current.push(e.data)
       }
 
-      // Handle recording stop
       mediaRecorder.onstop = async () => {
         const audioBlob = new Blob(chunksRef.current, { type: 'audio/webm' })
         chunksRef.current = []
-
-        // Stop all tracks
         stream.getTracks().forEach((track) => track.stop())
-
-        // Send to transcription
+        setState('processing')
         await sendToTranscription(audioBlob)
       }
 
-      // Start recording
       mediaRecorder.start()
       mediaRecorderRef.current = mediaRecorder
-      setIsRecording(true)
+      setState('listening')
     } catch (err) {
       console.error('Error accessing microphone:', err)
       setError('Could not access microphone. Please check permissions.')
+      setState('idle')
     }
   }
 
   const stopRecording = () => {
-    if (mediaRecorderRef.current && isRecording) {
+    if (mediaRecorderRef.current && state === 'listening') {
       mediaRecorderRef.current.stop()
-      setIsRecording(false)
     }
   }
 
@@ -67,84 +106,67 @@ export default function VoiceRecorder({ onTranscript, loading = false }: VoiceRe
       const formData = new FormData()
       formData.append('audio', audioBlob)
 
-      const response = await fetch('/api/transcribe', {
-        method: 'POST',
-        body: formData
-      })
-
-      if (!response.ok) {
-        throw new Error('Transcription failed')
-      }
+      const response = await fetch('/api/transcribe', { method: 'POST', body: formData })
+      if (!response.ok) throw new Error('Transcription failed')
 
       const data = await response.json()
       onTranscript(data.transcript)
+      setState('complete')
     } catch (err) {
       console.error('Transcription error:', err)
       setError('Transcription failed. Please try again.')
+      setState('idle')
     }
   }
 
+  const handleToggle = () => {
+    if (effectiveState === 'idle' || effectiveState === 'complete') startRecording()
+    else if (effectiveState === 'listening') stopRecording()
+  }
+
   return (
-    <div className="flex flex-col items-center gap-6">
-      {/* Microphone Button */}
+    <div className="mic-stage">
+      <div className={`mic-rings mic-rings-${effectiveState}`}>
+        <div className="mic-ring mic-ring-1" />
+        <div className="mic-ring mic-ring-2" />
+        <div className="mic-ring mic-ring-3" />
+      </div>
       <button
-        onClick={isRecording ? stopRecording : startRecording}
-        disabled={loading}
-        className={`w-32 h-32 rounded-full flex items-center justify-center transition-all focus:outline-none focus:ring-4 ${
-          isRecording
-            ? 'bg-red-500 hover:bg-red-600 animate-pulse focus:ring-red-500/30'
-            : 'bg-blue-600 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/20 focus:ring-blue-500/30'
-        } ${
-          loading ? 'opacity-50 cursor-not-allowed' : ''
-        }`}
+        className={`mic-button mic-button-${effectiveState}`}
+        onClick={handleToggle}
+        disabled={effectiveState === 'processing'}
+        aria-label={effectiveState === 'listening' ? 'Stop recording' : 'Start recording'}
       >
-        {loading ? (
-          <Spinner size="lg" />
-        ) : isRecording ? (
-          <div className="flex items-center justify-center">
-            <div className="w-8 h-8 bg-white rounded" />
-          </div>
-        ) : (
-          <svg
-            className="w-16 h-16 text-white"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path
-              fillRule="evenodd"
-              d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z"
-              clipRule="evenodd"
+        {effectiveState === 'processing' ? (
+          <svg className="mic-spinner" width="28" height="28" viewBox="0 0 28 28" aria-hidden>
+            <circle
+              cx="14"
+              cy="14"
+              r="11"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeDasharray="20 60"
+              strokeLinecap="round"
             />
           </svg>
+        ) : effectiveState === 'listening' ? (
+          <div className="w-6 h-6 bg-white rounded-sm" />
+        ) : (
+          <MicIcon />
         )}
       </button>
-
-      {/* Status Text */}
-      <div className="text-center">
-        {loading && (
-          <div className="text-neutral-300 font-medium">
-            Transcribing audio...
-          </div>
+      <p className="mic-caption">
+        {effectiveState === 'idle' && 'Click the microphone to start recording'}
+        {effectiveState === 'listening' && (
+          <>
+            Listening… <span className="mic-timer">{formatTime(elapsed)}</span>
+          </>
         )}
-        {isRecording && !loading && (
-          <div className="text-red-400 font-medium flex items-center gap-2">
-            <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse" />
-            Recording
-          </div>
-        )}
-        {!isRecording && !loading && (
-          <div className="text-neutral-400">
-            Click the microphone to start recording
-          </div>
-        )}
-      </div>
-
-      {/* Error Message */}
-      {error && (
-        <div className="px-4 py-2 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">
-          {error}
-        </div>
-      )}
+        {effectiveState === 'processing' && 'Processing your recording…'}
+        {effectiveState === 'complete' && 'Recording captured. Review below.'}
+      </p>
+      {error && <div className="mic-error">{error}</div>}
     </div>
   )
 }

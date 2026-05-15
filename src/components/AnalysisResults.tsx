@@ -1,5 +1,6 @@
 'use client'
 
+import { CheckCircle2, Lightbulb } from 'lucide-react'
 import type { JDAnalysis, MatchedBlock } from '@/types'
 import Spinner from './Spinner'
 
@@ -93,7 +94,7 @@ export default function AnalysisResults({
       {/* Match Summary */}
       <div className="p-6 bg-green-500/5 rounded-xl border border-green-500/20">
         <h2 className="text-xl font-semibold text-neutral-100 mb-4 flex items-center gap-2">
-          <span className="text-green-400 text-2xl">✓</span>
+          <CheckCircle2 className="size-6 text-green-400" />
           Overall Fit
         </h2>
         <p className="text-neutral-300 leading-relaxed text-[15px]">{summary}</p>
@@ -122,7 +123,7 @@ export default function AnalysisResults({
               </div>
               <p className="text-neutral-100 mb-3 leading-relaxed text-[15px]">{block.statement_text}</p>
               <div className="flex items-start gap-2 text-sm text-neutral-400 leading-relaxed">
-                <span className="text-blue-400 flex-shrink-0">💡</span>
+                <Lightbulb className="size-4 text-blue-400 flex-shrink-0 mt-0.5" />
                 <p className="italic">{block.match_reason}</p>
               </div>
             </div>

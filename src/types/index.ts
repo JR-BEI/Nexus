@@ -97,3 +97,84 @@ export interface Analysis {
   cover_letter?: string
   strategy_brief?: string
 }
+
+// ============================================================================
+// Tracker types (applications, contacts, appointments, notes)
+// ============================================================================
+
+export type ApplicationStatus =
+  | 'interested'
+  | 'applied'
+  | 'screening'
+  | 'interviewing'
+  | 'offer'
+  | 'rejected'
+  | 'on_hold'
+
+export interface Application {
+  id: string
+  company: string
+  role: string
+  status: ApplicationStatus
+  applied_date: string | null    // ISO date "YYYY-MM-DD"
+  jd_url: string
+  source: string                 // e.g. "Jacobson", "LinkedIn", "Direct", "Referral"
+  salary_target: string
+  analysis_id?: string           // link to localStorage Analysis
+  contact_ids: string[]          // linked contacts
+  notes: string
+  created_at: string             // ISO timestamp
+  updated_at: string
+}
+
+export interface Contact {
+  id: string
+  name: string
+  role: string                   // job title
+  company: string
+  source: string                 // "Jacobson", "DMEC", "LinkedIn", etc.
+  email: string
+  phone: string
+  linkedin: string
+  last_contacted: string | null  // ISO date
+  next_followup: string | null   // ISO date
+  tags: string[]                 // e.g. ["recruiter", "hiring-manager", "referral"]
+  notes: string
+  created_at: string
+  updated_at: string
+}
+
+export type AppointmentType =
+  | 'recruiter_call'
+  | 'phone_screen'
+  | 'technical'
+  | 'panel'
+  | 'exec'
+  | 'networking'
+  | 'other'
+
+export interface Appointment {
+  id: string
+  title: string
+  type: AppointmentType
+  starts_at: string              // ISO datetime
+  duration_min: number
+  company: string
+  application_id?: string
+  contact_ids: string[]
+  location: string               // physical or video link
+  prep_notes: string
+  outcome: string
+  created_at: string
+  updated_at: string
+}
+
+export interface ActivityNote {
+  id: string
+  date: string                   // ISO date
+  body: string
+  tags: string[]                 // free-form, e.g. ["#applied", "#networking"]
+  application_id?: string
+  contact_id?: string
+  created_at: string
+}
