@@ -556,14 +556,13 @@
       "location": "Manhattan, New York (Remote from Portland, Maine)",
       "start_date": "2024-11",
       "end_date": null,
-      "context": "Current role. Transitioned to Product Innovation to directly influence product quality and strategy. Functioning as a one-person product organization for a net-new absence management product line. Driving LLM innovation and maintaining industry thought leadership.",
+      "context": "Current role. Transitioned to Product Innovation to directly influence product quality and strategy. Functioning as a one-person product and engineering organization: sole owner of a net-new absence management product line, and sole engineer on the production claims intelligence platform behind it — LLM extraction pipeline, backend, frontend, data model, design system, and release tooling. Drives LLM adoption across the company and maintains industry thought leadership.",
       "categories": [
         {
           "name": "Product Development: Absence Command Center",
           "blocks": [
             "Sole owner of a brand-new absence management product (the company's first), spanning STD, state leaves, FMLA, and customer handling",
             "Performing every function: ontology design for policy rule extraction, solutions engineering for data handling, product design, UX wireframing, user story creation, problem statement development, discovery, business analysis, evaluation, and go-to-market fit",
-            "Designed the ontology for extracting policy rules from complex leave regulations (e.g., New York Paid Family Leave, FMLA)",
             "Partnered with two of the largest absence carriers in the U.S. (Lincoln and New York Life) as initial design partners",
             "Product is beyond initial MVP and progressing toward MVP v2, after which it will begin rolling out to live users",
             "Brings in engineering resources for active build phases but owns the entire product concept, strategy, and execution independently"
@@ -604,11 +603,6 @@
           "tags": ["absence-management", "product-ownership", "full-lifecycle", "FMLA", "state-leaves"]
         },
         {
-          "id": "pi-2",
-          "text": "Designed the regulatory ontology for policy rule extraction, enabling the system to interpret and apply complex leave regulations (NYPFL, FMLA, etc.) for automated absence administration",
-          "tags": ["ontology", "rule-extraction", "regulatory", "NYPFL", "FMLA", "automation"]
-        },
-        {
           "id": "pi-3",
           "text": "Partnered with two of the largest absence carriers in the U.S. as initial design partners; product is beyond MVP and progressing toward MVP v2 with live user rollout planned",
           "tags": ["carrier-partnerships", "MVP", "product-development", "design-partners"]
@@ -637,9 +631,435 @@
           "id": "pi-8",
           "text": "Attended 6+ conferences representing the company to carrier leadership, combining deep domain expertise with AI/ML product knowledge as a recognized InsurTech thought leader",
           "tags": ["conferences", "industry-presence", "carrier-relationships", "thought-leadership"]
+        },
+        {
+          "id": "pi-9",
+          "text": "Sole architect of an LLM-powered extraction pipeline that converts insurance policy documents into structured, citation-backed rules across multiple domain-specific extraction types",
+          "tags": ["LLM", "extraction-pipeline", "citations", "policy-documents", "structured-output", "architecture"],
+          "category": "AI & LLM Engineering"
+        },
+        {
+          "id": "pi-10",
+          "text": "Designed and built a 10+ phase post-extraction orchestration layer handling archival, exact and semantic deduplication, same-source conflict resolution, validation and rejection gates, cross-document scanning, convergence auditing, and drift detection",
+          "tags": ["orchestration", "deduplication", "conflict-resolution", "validation-gates", "convergence-auditing", "drift-detection", "data-quality"],
+          "category": "AI & LLM Engineering"
+        },
+        {
+          "id": "pi-11",
+          "text": "Built a delta extraction system using chunk hashing and sliding-window similarity that re-extracts only changed content between document versions, cutting update costs 85–98%",
+          "tags": ["delta-extraction", "chunk-hashing", "similarity-matching", "cost-optimization", "LLM-efficiency"],
+          "category": "AI & LLM Engineering"
+        },
+        {
+          "id": "pi-12",
+          "text": "Created a five-dimension quality scorecard — citation strength, freshness, claim match type, deviation from standard, and actionability — to score and rank AI-generated guidance before it reaches end users",
+          "tags": ["quality-scoring", "AI-guidance", "ranking", "trust-and-safety", "evaluation-metrics"],
+          "category": "AI & LLM Engineering"
+        },
+        {
+          "id": "pi-13",
+          "text": "Built a four-tier display hierarchy that gates AI output by quality score, routing content to the right level of prominence from critical alert to guidance to reference",
+          "tags": ["quality-gating", "UX-design", "AI-output-surfacing", "product-design", "information-hierarchy"],
+          "category": "AI & LLM Engineering"
+        },
+        {
+          "id": "pi-14",
+          "text": "Engineered a zero-LLM intent routing and retrieval layer for an in-claim Q&A feature, trading full inference for deterministic accuracy where cost and latency constraints demanded it",
+          "tags": ["intent-routing", "retrieval", "deterministic-systems", "latency-optimization", "cost-optimization", "QA-feature"],
+          "category": "AI & LLM Engineering"
+        },
+        {
+          "id": "pi-15",
+          "text": "Designed and ran golden-set evaluation harnesses that gate every AI release on answer correctness, routing accuracy, scope errors, and data leakage failures",
+          "tags": ["evals", "golden-set", "release-gating", "AI-quality-assurance", "data-leakage"],
+          "category": "AI & LLM Engineering"
+        },
+        {
+          "id": "pi-17",
+          "text": "Authored the extraction prompts and domain schemas that map unstructured policy language to a normalized fact-key ontology",
+          "tags": ["prompt-engineering", "schema-design", "ontology", "normalization", "domain-modeling"],
+          "category": "AI & LLM Engineering"
+        },
+        {
+          "id": "pi-18",
+          "text": "Designed graceful degradation patterns so optional AI enrichments fail silently without breaking the core claims workflow",
+          "tags": ["graceful-degradation", "system-reliability", "architecture", "claims-workflow", "fault-tolerance"],
+          "category": "AI & LLM Engineering"
+        },
+        {
+          "id": "pi-19",
+          "text": "Built and own a large claims intelligence backend in Python (FastAPI, SQLAlchemy 2, PostgreSQL) spanning 250+ endpoints across 40 routers",
+          "tags": ["Python", "FastAPI", "SQLAlchemy", "PostgreSQL", "backend-architecture", "API-design", "ownership"],
+          "category": "Backend & Platform Engineering"
+        },
+        {
+          "id": "pi-20",
+          "text": "Structured the entire service layer — 235 modules across 24 domains including extraction, rules, claims, compliance, payments, analytics, and review — on a thin-router, service-delegation architecture",
+          "tags": ["service-layer", "modular-architecture", "separation-of-concerns", "domain-driven-design", "scalable-codebase"],
+          "category": "Backend & Platform Engineering"
+        },
+        {
+          "id": "pi-21",
+          "text": "Modeled a complex insurance domain across 84 relational data models, with Alembic-managed schema migrations built from scratch",
+          "tags": ["data-modeling", "relational-design", "Alembic", "schema-migrations", "insurance-domain"],
+          "category": "Backend & Platform Engineering"
+        },
+        {
+          "id": "pi-22",
+          "text": "Built a provision resolution engine mapping 72 data-dictionary fields to policy provisions, with scope-rule vs. value-rule distinctions and runtime claim-level assertion",
+          "tags": ["rules-engine", "provision-resolution", "data-dictionary", "runtime-assertion", "policy-logic"],
+          "category": "Backend & Platform Engineering"
+        },
+        {
+          "id": "pi-23",
+          "text": "Implemented temporal and event-based field logic with domain-specific precision rules: calendar-month math, elimination-period day counting, and tolerance-based value comparison",
+          "tags": ["temporal-logic", "event-driven", "business-rules", "date-math", "elimination-period", "precision-handling"],
+          "category": "Backend & Platform Engineering"
+        },
+        {
+          "id": "pi-24",
+          "text": "Designed a multi-source precedence model — customer, policy, and statutory — with override-direction validation and regulatory compliance enforcement",
+          "tags": ["precedence-model", "multi-source-data", "override-validation", "regulatory-compliance", "rules-hierarchy"],
+          "category": "Backend & Platform Engineering"
+        },
+        {
+          "id": "pi-25",
+          "text": "Built a dual-path ingestion architecture converging structured carrier feeds and document-extraction output into a single rule model with full source provenance",
+          "tags": ["data-ingestion", "pipeline-architecture", "carrier-feeds", "provenance", "data-integration"],
+          "category": "Backend & Platform Engineering"
+        },
+        {
+          "id": "pi-26",
+          "text": "Wrote the database seeding and snapshot tooling that cut environment restores from multi-minute full rebuilds to under 8 seconds, making test environments fast and reproducible",
+          "tags": ["developer-tooling", "database-seeding", "snapshots", "reproducibility", "developer-experience", "test-environments"],
+          "category": "Backend & Platform Engineering"
+        },
+        {
+          "id": "pi-27",
+          "text": "Added provenance tracking across all analytics endpoints so every reported number is traceable to its source for auditability",
+          "tags": ["provenance", "auditability", "analytics", "data-lineage", "compliance"],
+          "category": "Backend & Platform Engineering"
+        },
+        {
+          "id": "pi-28",
+          "text": "Built the entire React 18 + TypeScript + Vite frontend: 8 primary views and 51 nested routes spanning pipeline stages and admin tooling",
+          "tags": ["React", "TypeScript", "Vite", "frontend-architecture", "routing", "SPA", "ownership"],
+          "category": "Frontend Engineering"
+        },
+        {
+          "id": "pi-29",
+          "text": "Designed and implemented a three-zone claim detail layout — storyboard rail, main canvas, and contextual drawer — using progressive disclosure to make complex claims data navigable",
+          "tags": ["UX-architecture", "progressive-disclosure", "information-design", "layout-design", "complex-data-UI"],
+          "category": "Frontend Engineering"
+        },
+        {
+          "id": "pi-30",
+          "text": "Built a reusable component system from the ground up — data tables, badges, buttons, drawers, modals, pagination, and page headers — enforcing consistent interaction patterns across the app",
+          "tags": ["design-system", "component-library", "reusable-components", "UI-consistency", "frontend-engineering"],
+          "category": "Frontend Engineering"
+        },
+        {
+          "id": "pi-31",
+          "text": "Wrote the client-side detectors for algorithmic claim checks, including elimination-period mismatch and mixed funding, complementing server-evaluated rules",
+          "tags": ["client-side-logic", "claim-detectors", "business-rules", "elimination-period", "hybrid-validation"],
+          "category": "Frontend Engineering"
+        },
+        {
+          "id": "pi-32",
+          "text": "Built a time-travel scrubber that lets examiners replay a claim's full lifespan, seeing the data exactly as it stood at any point in time",
+          "tags": ["time-travel-UI", "data-visualization", "state-replay", "examiner-tooling", "temporal-data"],
+          "category": "Frontend Engineering"
+        },
+        {
+          "id": "pi-33",
+          "text": "Implemented a split claims experience — a working queue plus a fully searchable book — with sortable tables, filtering, column selection, and row-density controls",
+          "tags": ["search-and-filtering", "data-tables", "workflow-UI", "user-configurability", "queue-management"],
+          "category": "Frontend Engineering"
+        },
+        {
+          "id": "pi-34",
+          "text": "Built a fully tokenized design system from the ground up — color, typography, type scales, spacing, z-index, motion, shadows, and radii — and migrated the entire application onto it",
+          "tags": ["design-system", "design-tokens", "typography", "spacing-scale", "motion", "migration", "UI-architecture"],
+          "category": "Design Systems & UI Quality"
+        },
+        {
+          "id": "pi-35",
+          "text": "Wrote an automated component token audit with regex-based rules that enforces design-system compliance in CI, blocking hard-coded colors, overlays, and off-scale values before merge",
+          "tags": ["automated-auditing", "CI-enforcement", "design-system-compliance", "linting", "code-quality", "tooling"],
+          "category": "Design Systems & UI Quality"
+        },
+        {
+          "id": "pi-36",
+          "text": "Defined and enforced typography and accessibility standards — minimum text sizes, line-height floors, and weight conventions — codified as lint rules so violations surface before review",
+          "tags": ["accessibility", "typography", "WCAG", "standards-enforcement", "lint-rules", "UI-quality"],
+          "category": "Design Systems & UI Quality"
+        },
+        {
+          "id": "pi-37",
+          "text": "Consolidated ad hoc layout patterns into a shared utility-class and component library, eliminating styling drift across the codebase",
+          "tags": ["component-library", "utility-classes", "consistency", "refactoring", "styling-drift", "maintainability"],
+          "category": "Design Systems & UI Quality"
+        },
+        {
+          "id": "pi-38",
+          "text": "Led and executed the retirement of a legacy 28-type ontology in favor of a fact-key catalog as the single source of truth, including the schema migrations that dropped deprecated tables and foreign keys",
+          "tags": ["ontology", "fact-key-catalog", "single-source-of-truth", "legacy-migration", "schema-migrations", "technical-debt"],
+          "category": "Domain Modeling & Knowledge Systems"
+        },
+        {
+          "id": "pi-39",
+          "text": "Designed and shipped a per-fact version control model for the knowledge base — human-verification gating, re-verify and bulk re-verify workflows, approval and publish stamps, and backlog surfacing — released behind feature flags for a fully reversible rollout",
+          "tags": ["version-control", "human-in-the-loop", "verification-workflows", "knowledge-base", "feature-flags", "safe-rollout"],
+          "category": "Domain Modeling & Knowledge Systems"
+        },
+        {
+          "id": "pi-40",
+          "text": "Built a variant sorting system that classifies extracted rules as collisions, variants, or needs-scope, driving ambiguity to near zero across 900+ standing rules with confirm-on-render gating at every choke point",
+          "tags": ["rule-classification", "ambiguity-resolution", "data-quality", "human-in-the-loop", "knowledge-curation"],
+          "category": "Domain Modeling & Knowledge Systems"
+        },
+        {
+          "id": "pi-41",
+          "text": "Designed a procedure catalog and executable verb layer: a declarative-rule registry of claims-handling procedures with acyclic call-graph enforcement and coverage diagnostics that surface gaps across axes and scopes",
+          "tags": ["procedure-catalog", "declarative-rules", "call-graph-validation", "coverage-diagnostics", "domain-modeling", "claims-handling"],
+          "category": "Domain Modeling & Knowledge Systems"
+        },
+        {
+          "id": "pi-42",
+          "text": "Built the smart bullet system — config-driven, server-evaluated guidance assembled from eight sources and filtered by claim lifecycle phase and claim type",
+          "tags": ["config-driven-architecture", "guidance-engine", "server-evaluation", "claim-lifecycle", "contextual-content"],
+          "category": "Domain Modeling & Knowledge Systems"
+        },
+        {
+          "id": "pi-43",
+          "text": "Migrated hundreds of hand-authored content literals — customer rules, evidence requirements, benefit descriptions — onto extraction-sourced content data, deleting large blocks of hard-coded placeholder content",
+          "tags": ["content-migration", "data-driven-content", "technical-debt", "extraction-pipeline", "maintainability"],
+          "category": "Domain Modeling & Knowledge Systems"
+        },
+        {
+          "id": "pi-44",
+          "text": "Integrated process mining analytics (PM4Py) over claims lifecycle data to expose how claims actually move through the process",
+          "tags": ["process-mining", "PM4Py", "Python", "analytics", "claims-lifecycle", "process-analysis"],
+          "category": "Data & Analytics"
+        },
+        {
+          "id": "pi-45",
+          "text": "Modeled a data stream catalog tracking 17 carrier data streams by availability state — connected, planned, available — and surfaced that state in rule wiring and configuration",
+          "tags": ["data-cataloging", "carrier-data", "data-availability", "configuration-management", "data-governance"],
+          "category": "Data & Analytics"
+        },
+        {
+          "id": "pi-46",
+          "text": "Built reconciliation logic that computes benefit figures internally with cited, inspectable derivations, used solely to check carrier-reported amounts and never as a system of record",
+          "tags": ["reconciliation", "benefit-calculation", "auditability", "derivation-transparency", "data-validation"],
+          "category": "Data & Analytics"
+        },
+        {
+          "id": "pi-47",
+          "text": "Audited and mapped carrier structured data feeds against the internal provision registry, including coverage-gap analysis across multiple customers",
+          "tags": ["data-auditing", "data-mapping", "carrier-feeds", "gap-analysis", "provision-registry"],
+          "category": "Data & Analytics"
+        },
+        {
+          "id": "pi-48",
+          "text": "Implemented statutory rule handling for multiple U.S. state absence and leave programs, with jurisdiction-aware cache keying by claim situs",
+          "tags": ["statutory-compliance", "state-leave-programs", "jurisdiction-aware", "claim-situs", "regulatory-logic"],
+          "category": "Compliance & Regulatory"
+        },
+        {
+          "id": "pi-49",
+          "text": "Built override-direction validation that accepts customer overrides only when they are more generous to the claimant, flagging less-generous-than-statutory overrides as compliance violations",
+          "tags": ["compliance-enforcement", "override-validation", "claimant-protection", "regulatory-guardrails", "business-rules"],
+          "category": "Compliance & Regulatory"
+        },
+        {
+          "id": "pi-50",
+          "text": "Integrated real statutory rate data — state PFML and PFL benefit figures — with future-effective provision handling that surfaces guidance for rules coming into effect",
+          "tags": ["statutory-rates", "PFML", "PFL", "future-effective-dating", "regulatory-data"],
+          "category": "Compliance & Regulatory"
+        },
+        {
+          "id": "pi-51",
+          "text": "Designed a compliance workflow that surfaces statutory gotchas as coordination guidance, linked back to the underlying regulatory facts",
+          "tags": ["compliance-workflow", "coordination-of-benefits", "guidance-surfacing", "regulatory-facts", "examiner-support"],
+          "category": "Compliance & Regulatory"
+        },
+        {
+          "id": "pi-52",
+          "text": "Established an architecture decision record practice and authored the decision records governing every major platform change",
+          "tags": ["ADR", "architecture-governance", "technical-documentation", "engineering-practice", "decision-records"],
+          "category": "Engineering Practice & Process"
+        },
+        {
+          "id": "pi-53",
+          "text": "Built a governance CI sweep covering data contamination, cross-scenario leaks, and hard-coded value and registry checks, run against a seeded database on every release",
+          "tags": ["CI-CD", "governance-automation", "data-contamination", "release-gating", "automated-checks"],
+          "category": "Engineering Practice & Process"
+        },
+        {
+          "id": "pi-54",
+          "text": "Designed a custom development automation framework of skills, rules, and hooks that encodes repeatable procedures and enforces engineering conventions — tooling built from scratch because none existed",
+          "tags": ["developer-tooling", "automation-framework", "convention-enforcement", "self-directed", "engineering-productivity"],
+          "category": "Engineering Practice & Process"
+        },
+        {
+          "id": "pi-55",
+          "text": "Drove feature-flag-gated rollouts for high-risk changes, keeping new behavior inert and reversible until explicitly enabled",
+          "tags": ["feature-flags", "safe-rollout", "risk-management", "progressive-delivery", "release-engineering"],
+          "category": "Engineering Practice & Process"
+        },
+        {
+          "id": "pi-56",
+          "text": "Wrote and maintained a 2,360-test suite across 229 test files, with governance gates codifying the standard verification path",
+          "tags": ["test-coverage", "test-automation", "quality-gates", "verification", "engineering-rigor"],
+          "category": "Engineering Practice & Process"
+        },
+        {
+          "id": "pi-58",
+          "text": "Built reproducible test harnesses and seed-based fixtures enabling deterministic testing against realistic claims data",
+          "tags": ["test-harnesses", "fixtures", "deterministic-testing", "reproducibility", "test-data"],
+          "category": "Testing & Quality"
+        },
+        {
+          "id": "pi-59",
+          "text": "Designed answer-key oracles that detect silent regressions in AI-extracted output",
+          "tags": ["regression-detection", "answer-key-oracles", "AI-quality-assurance", "silent-failures", "evals"],
+          "category": "Testing & Quality"
+        },
+        {
+          "id": "pi-60",
+          "text": "Designed, built, and shipped an entire production claims intelligence platform as the sole engineer — AI extraction, backend, frontend, data model, design system, and release tooling — delivering multi-team scope single-handedly",
+          "tags": ["sole-engineer", "full-stack", "end-to-end-ownership", "production-platform", "claims-intelligence", "multi-team-scope"],
+          "category": "Scope & Ownership"
+        },
+        {
+          "id": "pi-63",
+          "text": "Sets and enforces all technical direction — ontology, versioning, governance, design system, and testing standards — with no existing team or standards to inherit from",
+          "tags": ["technical-direction", "standards-setting", "governance", "autonomy", "technical-leadership"],
+          "category": "Engineering Practice & Process"
+        },
+        {
+          "id": "pi-64",
+          "text": "Ran the entire technical engagement with a major absence and disability carrier single-handedly — requirements, proof of concept, demos, and stakeholder reviews — with no supporting team",
+          "tags": ["customer-engagement", "solutions-engineering", "carrier-relationships", "technical-leadership", "sole-contributor"],
+          "category": "Customer Engagement & Solutions Engineering"
+        },
+        {
+          "id": "pi-65",
+          "text": "Owned the proof-of-concept program end to end across multiple iteration cycles: scoping, building against real carrier data, running reviews, and folding feedback into the next cycle",
+          "tags": ["proof-of-concept", "iterative-delivery", "customer-feedback", "program-ownership", "real-data-validation"],
+          "category": "Customer Engagement & Solutions Engineering"
+        },
+        {
+          "id": "pi-66",
+          "text": "Drove subject-matter-expert interviews and validation cycles with carrier claims specialists, translating their domain expertise into product requirements and verifying extracted rules for domain accuracy before shipping",
+          "tags": ["SME-interviews", "requirements-elicitation", "domain-validation", "stakeholder-management", "knowledge-transfer"],
+          "category": "Customer Engagement & Solutions Engineering"
+        },
+        {
+          "id": "pi-67",
+          "text": "Built reviewer worksheets and evaluation workbooks that let SMEs validate AI-extracted rules at scale, turning subjective review into structured, measurable sign-off",
+          "tags": ["SME-validation", "evaluation-tooling", "human-in-the-loop", "process-design", "AI-quality-assurance"],
+          "category": "Customer Engagement & Solutions Engineering"
+        },
+        {
+          "id": "pi-68",
+          "text": "Served as the sole technical point of contact between the carrier and the platform, fielding domain questions, resolving ambiguities, and converting them directly into shipped features",
+          "tags": ["technical-account-management", "client-facing", "ambiguity-resolution", "feature-delivery", "carrier-relationships"],
+          "category": "Customer Engagement & Solutions Engineering"
+        },
+        {
+          "id": "pi-69",
+          "text": "Designed and built the entire demo experience: a curated real claims book, authored hero-claim narratives, and a live time-travel walkthrough of a claim's full lifecycle",
+          "tags": ["demo-design", "pre-sales", "storytelling", "narrative-design", "stakeholder-communication"],
+          "category": "Demo, Pre-Sales & Storytelling"
+        },
+        {
+          "id": "pi-70",
+          "text": "Built a reproducible, seeded demo environment — hero events, curated scenarios, snapshot restores — so the product could be demoed reliably on demand with no manual setup",
+          "tags": ["demo-environment", "reproducibility", "seeding-tooling", "snapshots", "sales-enablement"],
+          "category": "Demo, Pre-Sales & Storytelling"
+        },
+        {
+          "id": "pi-71",
+          "text": "Authored and maintained a 46-slide commercial marketing deck with a programmatic build pipeline — edit source, rebuild, regenerate assets — keeping sales collateral in sync with the shipping product",
+          "tags": ["sales-collateral", "marketing-deck", "build-automation", "content-pipeline", "sales-enablement"],
+          "category": "Demo, Pre-Sales & Storytelling"
+        },
+        {
+          "id": "pi-72",
+          "text": "Translated deep technical capability — LLM extraction, compliance logic, provision resolution — into stakeholder-facing narratives that non-technical decision makers could follow",
+          "tags": ["technical-translation", "executive-communication", "storytelling", "pre-sales", "stakeholder-management"],
+          "category": "Demo, Pre-Sales & Storytelling"
+        },
+        {
+          "id": "pi-73",
+          "text": "Built demo hero claims illustrating high-value scenarios such as statutory compliance gotchas, multi-product coordination, and benefit reconciliation, anchoring the product's value story",
+          "tags": ["demo-design", "value-storytelling", "scenario-design", "statutory-compliance", "coordination-of-benefits"],
+          "category": "Demo, Pre-Sales & Storytelling"
+        },
+        {
+          "id": "pi-74",
+          "text": "Built and ran golden-set evaluations against real carrier data to prove extraction accuracy to the customer, replacing anecdote with defensible, measurable correctness numbers",
+          "tags": ["golden-set", "evals", "accuracy-measurement", "customer-proof", "real-data-validation"],
+          "category": "Proof of Concept & Evaluation Delivery"
+        },
+        {
+          "id": "pi-75",
+          "text": "Delivered answer-key verification to the customer showing how extracted rules matched their authoritative source, building client trust in AI output",
+          "tags": ["answer-key-verification", "customer-trust", "AI-transparency", "validation-delivery", "extraction-quality"],
+          "category": "Proof of Concept & Evaluation Delivery"
+        },
+        {
+          "id": "pi-76",
+          "text": "Handled real vs. synthetic data boundaries deliberately, keeping PII exposure contained while still proving the product against representative data",
+          "tags": ["PII-handling", "data-privacy", "synthetic-data", "risk-management", "data-governance"],
+          "category": "Proof of Concept & Evaluation Delivery"
+        },
+        {
+          "id": "pi-77",
+          "text": "Reverse-engineered a major carrier's claims-handling domain — status codes, specialist model, system architecture, and compliance workflow — into a working product model, largely self-directed",
+          "tags": ["reverse-engineering", "domain-modeling", "claims-handling", "self-directed", "systems-analysis"],
+          "category": "Domain Translation & Reverse Engineering"
+        },
+        {
+          "id": "pi-78",
+          "text": "Modeled carrier-specific realities including private-plan vs. statutory PFML structures, product-family coordination, and jurisdiction-by-situs rules, built directly from SME input and source documents",
+          "tags": ["PFML", "private-plan", "product-coordination", "jurisdiction-aware", "domain-modeling", "SME-input"],
+          "category": "Domain Translation & Reverse Engineering"
+        },
+        {
+          "id": "pi-79",
+          "text": "Built a terminology glossary consolidating domain language across the product so it matches how carrier examiners actually speak",
+          "tags": ["terminology-glossary", "domain-language", "product-consistency", "user-centered-design", "examiner-workflow"],
+          "category": "Domain Translation & Reverse Engineering"
+        },
+        {
+          "id": "pi-81",
+          "text": "Carried a flagship carrier engagement from first requirements work through proof of concept and live demos as engineer, solutions architect, and technical account lead at once, with no dedicated solutions, data, or design support",
+          "tags": ["flagship-engagement", "multi-role", "solutions-architecture", "technical-account-management", "proof-of-concept", "client-ownership", "self-directed"],
+          "category": "Scope & Ownership"
+        },
+        {
+          "id": "pi-82",
+          "text": "Combines deep hands-on engineering with direct customer-facing delivery — a full-stack-plus-client-ownership profile that normally spans an entire engineering team, a solutions engineer, and a product manager",
+          "tags": ["full-stack", "client-facing", "hybrid-profile", "scope-breadth", "individual-contributor"],
+          "category": "Scope & Ownership"
+        },
+        {
+          "id": "pi-83",
+          "text": "An engineer who sells and ships: built a production claims intelligence platform and ran a major carrier engagement solo — POC cycles, SME validation, and live demos",
+          "tags": ["positioning-line", "summary-statement", "sole-engineer", "customer-facing", "production-platform"],
+          "category": "Profile & Positioning Lines"
+        },
+        {
+          "id": "pi-84",
+          "text": "Forward-deployed-style engineer: sole owner of both the build and the customer relationship for a flagship insurance carrier engagement, working everything from extraction pipeline to boardroom-ready demos",
+          "tags": ["positioning-line", "summary-statement", "forward-deployed", "end-to-end-ownership", "client-ownership"],
+          "category": "Profile & Positioning Lines"
         }
       ],
-      "tags": ["absence-management", "Absence-Command-Center", "FMLA", "state-leaves", "NYPFL", "ontology", "rule-extraction", "product-innovation", "MVP", "LLM", "leakage-detection", "hybrid-ML-LLM", "Apollo", "AI-Labs", "product-quality", "domain-expertise", "conference-speaker", "thought-leadership", "blog-writing", "LinkedIn", "Lincoln", "New-York-Life", "full-product-lifecycle", "wireframes", "user-stories", "go-to-market", "solutions-engineering", "CCC-acquisition"]
+      "tags": ["absence-management", "Absence-Command-Center", "FMLA", "state-leaves", "NYPFL", "ontology", "rule-extraction", "product-innovation", "MVP", "LLM", "leakage-detection", "hybrid-ML-LLM", "Apollo", "AI-Labs", "product-quality", "domain-expertise", "conference-speaker", "thought-leadership", "blog-writing", "LinkedIn", "Lincoln", "New-York-Life", "full-product-lifecycle", "wireframes", "user-stories", "go-to-market", "solutions-engineering", "CCC-acquisition", "extraction-pipeline", "citations", "orchestration", "deduplication", "delta-extraction", "drift-detection", "cost-optimization", "quality-scoring", "evals", "golden-set", "prompt-engineering", "schema-design", "intent-routing", "retrieval", "graceful-degradation", "AI-reliability", "Python", "FastAPI", "SQLAlchemy", "PostgreSQL", "backend-architecture", "API-design", "service-layer", "data-modeling", "Alembic", "schema-migrations", "rules-engine", "provision-resolution", "temporal-logic", "precedence-model", "data-ingestion", "provenance", "auditability", "developer-tooling", "regulatory-compliance", "React", "TypeScript", "Vite", "frontend-architecture", "design-system", "component-library", "progressive-disclosure", "UX-architecture", "data-tables", "data-visualization", "client-side-logic", "search-and-filtering", "examiner-tooling", "design-tokens", "typography", "accessibility", "WCAG", "CI-enforcement", "automated-auditing", "linting", "UI-quality", "code-quality", "utility-classes", "fact-key-catalog", "single-source-of-truth", "legacy-migration", "version-control", "human-in-the-loop", "verification-workflows", "knowledge-base", "feature-flags", "rule-classification", "declarative-rules", "procedure-catalog", "coverage-diagnostics", "guidance-engine", "config-driven-architecture", "content-migration", "technical-debt", "process-mining", "PM4Py", "analytics", "data-cataloging", "reconciliation", "benefit-calculation", "data-auditing", "gap-analysis", "statutory-compliance", "state-leave-programs", "claim-situs", "override-validation", "PFML", "PFL", "future-effective-dating", "compliance-workflow", "jurisdiction-aware", "ADR", "architecture-governance", "CI-CD", "governance-automation", "automation-framework", "release-engineering", "test-coverage", "test-automation", "deterministic-testing", "quality-assurance", "sole-engineer", "full-stack", "end-to-end-ownership", "production-platform", "claims-intelligence", "technical-direction", "standards-setting", "self-directed", "engineering-practice", "customer-engagement", "proof-of-concept", "SME-validation", "SME-interviews", "requirements-elicitation", "client-facing", "technical-account-management", "demo-design", "pre-sales", "storytelling", "sales-enablement", "sales-collateral", "technical-translation", "executive-communication", "accuracy-measurement", "customer-trust", "PII-handling", "data-privacy", "synthetic-data", "reverse-engineering", "private-plan", "terminology-glossary", "domain-language", "flagship-engagement", "forward-deployed", "client-ownership", "multi-role", "solutions-architecture"]
     }
   ]
 }
